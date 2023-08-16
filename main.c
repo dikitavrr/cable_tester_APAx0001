@@ -54,7 +54,8 @@ uint8_t G_U8AllLEDRespRedData = 0;
 
 uint8_t G_U8ActiveRaw = 0;
 uint8_t G_U8ActiveRawColor = 1;
-uint8_t G_U8AllLinesUnicolor = 0;
+uint8_t g_u8StepNumber = 0;
+uint8_t G_U8AllLinesUnicolor = 4; /*поменять на ноль*/
 uint8_t G_U8ChangeColor = 1;
 uint8_t G_U8DisplayAllLinesUnicolor = 0;
 
@@ -181,12 +182,14 @@ int main(void)
 
 	  //сформировали что отобразить
 
+
 	  if (G_U8ActiveRawColor == GREEN_COLOR) {
-			  G_U8LEDCallGreenData = LED_ON << G_AU8GreenCalls[G_U8ActiveRaw];
-			  G_U8LEDRespGreenData = LED_ON << G_AU8GreenResponses[G_U8ActiveRaw];
-			  G_U8LEDCallRedData = LED_OFF;
-			  G_U8LEDRespRedData = LED_OFF;
-	  }
+		  G_U8LEDCallGreenData = (LED_ON << G_AU8GreenCalls[G_U8ActiveRaw]) | (~BIN << (NUMBER_OF_LINES - g_u8StepNumber));
+		  G_U8LEDRespGreenData = (LED_ON << G_AU8GreenResponses[G_U8ActiveRaw]) | (~BIN << (NUMBER_OF_LINES - g_u8StepNumber));
+		  G_U8LEDCallRedData = LED_OFF;
+		  G_U8LEDRespRedData = LED_OFF;
+		  }
+
 
 	  if (G_U8ActiveRawColor == RED_COLOR) {
 			  G_U8LEDCallRedData = LED_ON << G_AU8RedCalls[G_U8ActiveRaw];
@@ -216,24 +219,31 @@ int main(void)
 			  G_U8NeedToDisplayLEDData = 0;
 		  }
 
-		  G_U8ActiveRawColor++;
+		//  G_U8ActiveRawColor++;
 
 		  if (G_U8ActiveRawColor == NUMBER_OF_COLORS) {
 			  G_U8ActiveRawColor = 0;
 		  }
 
-		  if (G_U8ActiveRawColor == YELLOW_COLOR) {
+		  //вот сюда сравнение суммы с восьмеркой, елси равна восьми то актив роу --
+
+		//  if (G_U8ActiveRawColor == YELLOW_COLOR) {
 			  G_U8ActiveRaw++;
 
 			  if (G_U8ActiveRaw == NUMBER_OF_LINES) {
 				  G_U8ActiveRaw = 0;
-				  G_U8AllLinesUnicolor++;
+				  g_u8StepNumber++;
+
+				  if (g_u8StepNumber == NUMBER_OF_LINES) {
+					  g_u8StepNumber = 0;
+				  }
+			//	  G_U8AllLinesUnicolor++;
 				  if (G_U8AllLinesUnicolor == NUMBER_OF_COLORS) {
 					  G_U8AllLinesUnicolor = 0;
 				  }
-				  G_U8DisplayAllLinesUnicolor = 1;
+				//  G_U8DisplayAllLinesUnicolor = 1;
 			  }
-		  }
+	//	  }
 	  }
 
 	  if (G_U8AllLinesUnicolor == GREEN_COLOR) {
@@ -283,7 +293,7 @@ int main(void)
 
 	  if (!USE_TIMER) {
 
-		  G_U8ActiveRawColor++;
+		//  G_U8ActiveRawColor++;
 			 if (G_U8ActiveRawColor == NUMBER_OF_COLORS) {
 				 G_U8ActiveRawColor = 0;
 			 }
