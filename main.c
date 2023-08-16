@@ -58,6 +58,7 @@ uint8_t g_u8StepNumber = 0;
 uint8_t G_U8AllLinesUnicolor = 4; /*поменять на ноль*/
 uint8_t G_U8ChangeColor = 1;
 uint8_t G_U8DisplayAllLinesUnicolor = 0;
+uint8_t BIN = 0b00000000;
 
 uint8_t G_U8NeedToDisplayLEDData = 1;
 uint8_t G_U8NeedToDefineLEDGreenData = 0;
@@ -182,14 +183,29 @@ int main(void)
 
 	  //сформировали что отобразить
 
-
-	  if (G_U8ActiveRawColor == GREEN_COLOR) {
-		  G_U8LEDCallGreenData = (LED_ON << G_AU8GreenCalls[G_U8ActiveRaw]) | (~BIN << (NUMBER_OF_LINES - g_u8StepNumber));
-		  G_U8LEDRespGreenData = (LED_ON << G_AU8GreenResponses[G_U8ActiveRaw]) | (~BIN << (NUMBER_OF_LINES - g_u8StepNumber));
-		  G_U8LEDCallRedData = LED_OFF;
-		  G_U8LEDRespRedData = LED_OFF;
+	  if (g_u8StepNumber == 0){
+		  if (G_U8ActiveRawColor == GREEN_COLOR) {
+			  G_U8LEDCallGreenData = (LED_ON << G_AU8GreenCalls[G_U8ActiveRaw]);
+			  G_U8LEDRespGreenData = (LED_ON << G_AU8GreenResponses[G_U8ActiveRaw]);
+			  G_U8LEDCallRedData = LED_OFF;
+			  G_U8LEDRespRedData = LED_OFF;
 		  }
+	  }
+	  if (g_u8StepNumber != 0){
+		  if (G_U8ActiveRawColor == GREEN_COLOR) {
+			  BIN = BIN | (SR_DATA_bm << G_AU8GreenCalls[NUMBER_OF_LINES - g_u8StepNumber]);
+			  BIN = BIN | (SR_DATA_bm << G_AU8GreenResponses[NUMBER_OF_LINES - g_u8StepNumber]);
+			  G_U8LEDCallGreenData = (LED_ON << G_AU8GreenCalls[G_U8ActiveRaw]) | (BIN);
+			  G_U8LEDRespGreenData = (LED_ON << G_AU8GreenResponses[G_U8ActiveRaw]) | (BIN);
 
+//			  G_U8LEDCallGreenData = (LED_ON << G_AU8GreenCalls[G_U8ActiveRaw]) | (~BIN << G_AU8GreenCalls[NUMBER_OF_LINES - g_u8StepNumber]);
+//			  G_U8LEDRespGreenData = (LED_ON << G_AU8GreenResponses[G_U8ActiveRaw]) | (~BIN << G_AU8GreenResponses[NUMBER_OF_LINES - g_u8StepNumber]);
+//			  G_U8LEDCallGreenData = (LED_ON << G_AU8GreenCalls[G_U8ActiveRaw]) | (~BIN << (NUMBER_OF_LINES - g_u8StepNumber));
+//			  G_U8LEDRespGreenData = (LED_ON << G_AU8GreenResponses[G_U8ActiveRaw]) | (~BIN << (NUMBER_OF_LINES - g_u8StepNumber));
+			  G_U8LEDCallRedData = LED_OFF;
+			  G_U8LEDRespRedData = LED_OFF;
+		  }
+      }
 
 	  if (G_U8ActiveRawColor == RED_COLOR) {
 			  G_U8LEDCallRedData = LED_ON << G_AU8RedCalls[G_U8ActiveRaw];
@@ -230,12 +246,14 @@ int main(void)
 		//  if (G_U8ActiveRawColor == YELLOW_COLOR) {
 			  G_U8ActiveRaw++;
 
-			  if (G_U8ActiveRaw == NUMBER_OF_LINES) {
+			  if (G_U8ActiveRaw + g_u8StepNumber == NUMBER_OF_LINES) {
 				  G_U8ActiveRaw = 0;
 				  g_u8StepNumber++;
 
+
 				  if (g_u8StepNumber == NUMBER_OF_LINES) {
 					  g_u8StepNumber = 0;
+					  BIN = 0b00000000;
 				  }
 			//	  G_U8AllLinesUnicolor++;
 				  if (G_U8AllLinesUnicolor == NUMBER_OF_COLORS) {
