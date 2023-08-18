@@ -61,12 +61,17 @@ uint8_t g_u8DisplayAllLinesUnicolor = 0;
 uint8_t g_u8BinaryGreen = 0b00000000;
 uint8_t g_u8BinaryRed = 0b00000000;
 
-int g_s32TimePeriod = 0;
+int g_u32TimePeriod = 0;
 
 uint8_t g_u8NeedToDisplayLEDData = 1;
 uint8_t g_u8NeedToDefineLEDGreenData = 0;
 uint8_t g_u8NeedToDefineLEDRedData = 0;
 uint8_t g_u8NeedToDefineLEDNothingData = 0;
+
+RCC_ClkInitTypeDef sClokConfig;
+uint32_t pFLatency;
+uint32_t u32Prescaler;
+uint32_t g_frequency;
 
 uint8_t g_au8GreenCalls[m_NUMBER_OF_LINES] = {
 		m_CALL_GREEN_LED_8_POS,
@@ -172,6 +177,16 @@ int main(void)
 
   }
 
+                                                   /* TIME SETTINGS*/
+
+  /*AHBPrescTable * APBPrescTable */
+  g_frequency = HAL_RCC_GetPCLK1Freq();
+
+  HAL_RCC_GetClockConfig(&sClokConfig, &pFLatency);
+  //u32Prescaler = sClokConfig.APB1CLKDivider;
+  u32Prescaler = htim3.Init.Prescaler;
+  g_u32TimePeriod = ((g_frequency * m_TIME_TRIGGERING_LED_MS) / ((u32Prescaler + 1) * 1000)) - 1;
+  __HAL_TIM_SET_AUTORELOAD(&htim3, g_u32TimePeriod);
 
   /* USER CODE END 2 */
 
@@ -240,9 +255,6 @@ int main(void)
 		  ClearLEDSR();
 		  LoadLEDSR();
 
-		  /*AHBPrescTable * APBPrescTable */
-		  g_s32TimePeriod = (SystemCoreClock) / (m_CLOCK_PRESCALER * m_TIME_TRIGGERING_LED_MS * 10e-3);
-		  __HAL_TIM_SET_AUTORELOAD(&htim3, g_s32TimePeriod);
 
 		  if (m_USE_TIMER) {
 			  g_u8NeedToDisplayLEDData = 0;
@@ -379,7 +391,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 124;
+  htim3.Init.Prescaler = 15999;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 64999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

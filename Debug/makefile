@@ -60,8 +60,8 @@ all: main-build
 main-build: CableTesterATAx0001.elf secondary-outputs
 
 # Tool invocations
-CableTesterATAx0001.elf CableTesterATAx0001.map: $(OBJS) $(USER_OBJS) C:\Users\User\STM32CubeIDE\workspace_1.10.1\CableTesterATAx0001\STM32F091CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "CableTesterATAx0001.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\User\STM32CubeIDE\workspace_1.10.1\CableTesterATAx0001\STM32F091CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CableTesterATAx0001.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+CableTesterATAx0001.elf CableTesterATAx0001.map: $(OBJS) $(USER_OBJS) C:\Users\User\Desktop\Cable\ tester\cable_tester_ATAx0001\STM32F091CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "CableTesterATAx0001.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\User\Desktop\Cable tester\cable_tester_ATAx0001\STM32F091CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CableTesterATAx0001.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
