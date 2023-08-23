@@ -71,15 +71,13 @@ uint8_t g_u8NeedToDefineLEDNothingData = 0;
 uint8_t g_u8NeedToRingLine = 1;  /*далее обнулить и единичить по таймеру 10-100кгц*/
 
 RCC_ClkInitTypeDef sClokConfig;
-uint32_t pFLatency;
-uint32_t u32Prescaler;
-uint32_t g_frequency;
+uint32_t g_u32Prescaler;
+uint32_t g_u32frequencyTIM3;
 
-uint8_t a = 0;
-uint8_t CallColumn = 0;
-uint8_t RespString = 0;
+uint8_t g_u8CallColumn = 0;
+uint8_t g_u8RespString = 0;
 
-uint8_t g_au8ResponsesData [NUMBER_OF_LINES] [NUMBER_OF_LINES] = {
+uint8_t g_au8ResponsesData [NUMBER_OF_LINES][NUMBER_OF_LINES] = {
 		{0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0},
@@ -203,13 +201,10 @@ int main(void)
 
                                                    /* TIME SETTINGS*/
 
-  /*AHBPrescTable * APBPrescTable */
-  g_frequency = HAL_RCC_GetPCLK1Freq();
+  g_u32frequencyTIM3 = HAL_RCC_GetPCLK1Freq();
 
-  //HAL_RCC_GetClockConfig(&sClokConfig, &pFLatency);
-  //u32Prescaler = sClokConfig.APB1CLKDivider;
-  u32Prescaler = htim3.Init.Prescaler;
-  g_u32TimePeriod = ((g_frequency * TIME_BLINKING_LED_MS) / ((u32Prescaler + 1) * 1000)) - 1;
+  g_u32Prescaler = htim3.Init.Prescaler;
+  g_u32TimePeriod = ((g_u32frequencyTIM3 * TIME_BLINKING_LED_MS) / ((g_u32Prescaler + 1) * 1000)) - 1;
   __HAL_TIM_SET_AUTORELOAD(&htim3, g_u32TimePeriod);
 
   /* USER CODE END 2 */
@@ -231,31 +226,38 @@ if (g_u8NeedToRingLine) {
 
 	ClearCallSR();
 
+
 	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 
-	for (CallColumn = 0; CallColumn < NUMBER_OF_LINES; CallColumn++) {
+	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
+
+	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
+
+
+	for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES; g_u8CallColumn++) {
+
+		HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
+
+		HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin, GPIO_PIN_RESET);
+
+		for (g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES; g_u8RespString++) {
+			HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
+
+			if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port, LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
+				g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 1;
+			}
+			else {
+				g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 0;
+			}
+
+		}
 
 		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
 
 		HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
-
-		for (RespString = 0; RespString < NUMBER_OF_LINES; RespString++) {
-
-	//		for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
-				HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
-
-				if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port, LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
-					g_au8ResponsesData[CallColumn][RespString] = 1;
-				}
-				else {
-					g_au8ResponsesData[CallColumn][RespString] = 0;
-				}
-	//	    }
-		}
-		//HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
 	}
 }
 
