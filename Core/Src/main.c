@@ -224,8 +224,7 @@ int main(void)
 //хочу чтобы 00000001 прошёл поочерёдно по 8 линиям и результат записался в двумерный массив
 if (g_u8NeedToRingLine) {
 
-	ClearCallSR();
-
+    ClearCallSR();
 
 	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 
@@ -237,12 +236,12 @@ if (g_u8NeedToRingLine) {
 
 	for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES; g_u8CallColumn++) {
 
-		HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
 
 		HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin, GPIO_PIN_RESET);
 
 		for (g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES; g_u8RespString++) {
-			HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
+		    HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
 
 			if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port, LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
@@ -265,41 +264,43 @@ if (g_u8NeedToRingLine) {
 
                                                       /* data processing */
 //хочу чтобы двумерный массив обработался и на основе обработки сгенерировались данные для отображения
-	  //сформировали что отобразить
+//сформировали что отобразить
 
-	  if (g_u8StepNumber == 0){
+if (g_u8StepNumber == 0){
 
-		  if (g_u8ActiveRowColor == GREEN_COLOR) {
-			  if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
-				  g_u8LEDCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]);
-				  g_u8LEDCallRedData = LED_OFF;
-			  }
-			  if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) && (g_u8ActiveLED < NUMBER_OF_LEDS)) {
-			  g_u8LEDRespGreenData = (LED_ON << g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1]);
-			  g_u8LEDRespRedData = LED_OFF;
-			  }
-		  }
-		  if (g_u8ActiveRowColor == RED_COLOR) {
-			  if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
-				  g_u8LEDCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
-				  g_u8LEDCallGreenData = LED_OFF;
-			  }
-			  if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) && (g_u8ActiveLED < NUMBER_OF_LEDS)) {
-				  g_u8LEDRespRedData = LED_ON << g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
-				  g_u8LEDRespGreenData = LED_OFF;
-			  }
-		  }
-		  if (g_u8ActiveRowColor == YELLOW_COLOR) {
-			  if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
-				  g_u8LEDCallGreenData = LED_ON << g_au8GreenCalls[g_u8ActiveRow];
-			      g_u8LEDCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
-			  }
-			  if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) && (g_u8ActiveLED < NUMBER_OF_LEDS)) {
-				  g_u8LEDRespGreenData = LED_ON << g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
-				  g_u8LEDRespRedData = LED_ON << g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
-			  }
-		  }
-	  }
+    if (g_u8ActiveRowColor == GREEN_COLOR) {
+        if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS / 2)) {
+		    g_u8LEDCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]);
+            g_u8LEDCallRedData = LED_OFF;
+		}
+		if ((g_u8ActiveLED >= NUMBER_OF_LEDS / 2) && (g_u8ActiveLED < NUMBER_OF_LEDS)) {
+		    g_u8LEDRespGreenData = (LED_ON << g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1]);
+			g_u8LEDRespRedData = LED_OFF;
+		}
+	}
+
+	if (g_u8ActiveRowColor == RED_COLOR) {
+		if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
+		    g_u8LEDCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
+			g_u8LEDCallGreenData = LED_OFF;
+		}
+		if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) && (g_u8ActiveLED < NUMBER_OF_LEDS)) {
+			g_u8LEDRespRedData = LED_ON << g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
+			g_u8LEDRespGreenData = LED_OFF;
+		}
+	}
+
+	if (g_u8ActiveRowColor == YELLOW_COLOR) {
+		if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
+			g_u8LEDCallGreenData = LED_ON << g_au8GreenCalls[g_u8ActiveRow];
+			g_u8LEDCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
+		}
+		if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) && (g_u8ActiveLED < NUMBER_OF_LEDS)) {
+		    g_u8LEDRespGreenData = LED_ON << g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
+			g_u8LEDRespRedData = LED_ON << g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
+		}
+    }
+}
 
 	  if (g_u8StepNumber != 0) {
 
