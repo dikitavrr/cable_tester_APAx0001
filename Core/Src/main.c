@@ -236,8 +236,16 @@ int main(void)
 
             ClearCallSR();
 
+            for (uint8_t i = 0; i < 8; i++) {
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_SET);
+	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
+	        		GPIO_PIN_SET);
+	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
+	        		GPIO_PIN_RESET);
+            }
+	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+	                GPIO_PIN_RESET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
 	        		GPIO_PIN_SET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
@@ -247,13 +255,15 @@ int main(void)
 	        for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
 	        		g_u8CallColumn++) {
 
-		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
+		        HAL_Delay(100);
+
+	        	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
-
+		        /*не нужна правда без неё не работает*/
 		        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
-		        		LINE_CALL_SR_DATA_Pin, GPIO_PIN_RESET); /*не нужна*/
+		        		LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 
 		        for (g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
 		        		g_u8RespString++) {
@@ -279,8 +289,6 @@ int main(void)
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
 
-		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
-		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
 	        }
         }
 
