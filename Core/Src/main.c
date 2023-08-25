@@ -43,19 +43,19 @@ TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
-uint8_t g_u8LEDCallGreenData = 0;
-uint8_t g_u8LEDRespGreenData = 0;
-uint8_t g_u8LEDCallRedData = 0;
-uint8_t g_u8LEDRespRedData = 0;
+uint8_t g_u8LedCallGreenData = 0;
+uint8_t g_u8LedRespGreenData = 0;
+uint8_t g_u8LedCallRedData = 0;
+uint8_t g_u8LedRespRedData = 0;
 
-uint8_t g_u8AllLEDCallGreenData = 0;
-uint8_t g_u8AllLEDRespGreenData = 0;
-uint8_t g_u8AllLEDCallRedData = 0;
-uint8_t g_u8AllLEDRespRedData = 0;
+uint8_t g_u8AllLedCallGreenData = 0;
+uint8_t g_u8AllLedRespGreenData = 0;
+uint8_t g_u8AllLedCallRedData = 0;
+uint8_t g_u8AllLedRespRedData = 0;
 
 uint8_t g_u8ActiveRow = 0;
 uint8_t g_u8ActiveRowColor = 1;
-uint8_t g_u8ActiveLED = 0;
+uint8_t g_u8ActiveLed = 0;
 uint8_t g_u8StepNumber = 0;
 /*поменять на ноль если режим мигание и потом все горят сразу и снова мигание*/
 uint8_t g_u8AllLinesUnicolor = 4;
@@ -66,19 +66,16 @@ uint8_t g_u8ColumnRed = 0b00000000;
 
 uint32_t g_u32TimePeriod = 0;
 
-uint8_t g_u8NeedToDisplayLEDData = 1;
-uint8_t g_u8NeedToDefineLEDGreenData = 0;
-uint8_t g_u8NeedToDefineLEDRedData = 0;
-uint8_t g_u8NeedToDefineLEDNothingData = 0;
+uint8_t g_u8NeedToDisplayLedData = 1;
+uint8_t g_u8NeedToDefineLedGreenData = 0;
+uint8_t g_u8NeedToDefineLedRedData = 0;
+uint8_t g_u8NeedToDefineLedNothingData = 0;
 /*далее обнулить и единичить по таймеру 10-100кгц*/
 uint8_t g_u8NeedToRingLine = 1;
 
 RCC_ClkInitTypeDef sClokConfig;
 uint32_t g_u32Prescaler;
-uint32_t g_u32frequencyTIM3;
-
-uint8_t g_u8CallColumn = 0;
-uint8_t g_u8RespString = 0;
+uint32_t g_u32frequencyTim3;
 
 uint8_t g_au8ResponsesData [NUMBER_OF_LINES][NUMBER_OF_LINES] = {
 		{0, 0, 0, 0, 0, 0, 0, 0},
@@ -139,11 +136,11 @@ static void MX_GPIO_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
-void ClearLEDSR(void);
-void LoadLEDSR(void);
-void ChangeColorLEDSR(void);
-void ChangeRowLEDSR(void);
-void ClearCallSR(void);
+void clearLEDSR(void);
+void loadLEDSR(void);
+void changeColorLEDSR(void);
+void changeRowLEDSR(void);
+void clearCallSR(void);
 
 /* USER CODE END PFP */
 
@@ -184,12 +181,12 @@ int main(void)
     MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
-// Установить все линии в первоначальное положение светодиодов
+    //Установить все линии в первоначальное положение светодиодов
     HAL_GPIO_WritePin(STP_SR_LED_nCLR_GPIO_Port, STP_SR_LED_nCLR_Pin,
     		GPIO_PIN_SET);
     HAL_GPIO_WritePin(STP_SR_LED_CLK_GPIO_Port, STP_SR_LED_CLK_Pin,
     		GPIO_PIN_RESET);
-// Установить все линии в первоначальное положение прозвонки и чтения
+    //Установить все линии в первоначальное положение прозвонки и чтения
     HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
     		GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin,
@@ -199,20 +196,20 @@ int main(void)
     HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port, LINE_RESPONSE_SR_SHnLD_Pin,
     		GPIO_PIN_SET);
 
-    ClearLEDSR();
-    ClearCallSR();
-// Запустить таймер
+    clearLEDSR();
+    clearCallSR();
+    // Запустить таймер
     if (USE_TIMER) {
         HAL_TIM_Base_Start_IT(&htim3);
         HAL_TIM_Base_Start_IT(&htim6);
     }
 
-                               /* TIME SETTINGS*/
+    /*TIME SETTINGS*/
 
-    g_u32frequencyTIM3 = HAL_RCC_GetPCLK1Freq();
+    g_u32frequencyTim3 = HAL_RCC_GetPCLK1Freq();
 
     g_u32Prescaler = htim3.Init.Prescaler;
-    g_u32TimePeriod = ((g_u32frequencyTIM3 * TIME_BLINKING_LED_MS) /
+    g_u32TimePeriod = ((g_u32frequencyTim3 * TIME_BLINKING_LED_MS) /
     		((g_u32Prescaler + 1) * 1000)) - 1;
     __HAL_TIM_SET_AUTORELOAD(&htim3, g_u32TimePeriod);
 
@@ -221,29 +218,28 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-//  NeedToDefineLEDGreenData = 1;
-
     while (1)
     {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
-	                           /* ringing of lines */
-    	/*хочу чтобы 00000001 прошёл поочерёдно по 8 линиям и
-				результат записался в двумерный массив*/
+    		/*ringing of lines*/
+    		/*хочу чтобы 01111111 прошёл поочерёдно по 8 линиям и
+    		 	 	 * результат записался в двумерный массив*/
         if (g_u8NeedToRingLine) {
 
-            ClearCallSR();
+            clearCallSR();
 
-            for (uint8_t i = 0; i < 8; i++) {
-	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+            for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
+            	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_SET);
-	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
+            	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
 	        		GPIO_PIN_SET);
-	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
+            	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
 	        		GPIO_PIN_RESET);
             }
+
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_RESET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
@@ -252,7 +248,7 @@ int main(void)
 	        		GPIO_PIN_RESET);
 
             /*сюда флаг для таймера?*/
-	        for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
+	        for (uint8_t g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
 	        		g_u8CallColumn++) {
 
 		        HAL_Delay(100);
@@ -261,11 +257,11 @@ int main(void)
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
-		        /*не нужна правда без неё не работает*/
+
 		        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
 		        		LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 
-		        for (g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
+		        for (uint8_t g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
 		        		g_u8RespString++) {
 
 		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
@@ -284,6 +280,8 @@ int main(void)
 		        }
 		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
 
+		        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
+		        		LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
@@ -294,49 +292,49 @@ int main(void)
 
 
 
-                            /* data processing */
-//хочу чтобы двумерный массив обработался и
+        /* data processing */
+        //хочу чтобы двумерный массив обработался и
         //на основе обработки сгенерировались данные для отображения
-//сформировали что отобразить
+        //сформировали что отобразить
 
-        if (g_u8StepNumber == 0){
+        if (g_u8StepNumber == 0) {
 
             if (g_u8ActiveRowColor == GREEN_COLOR) {
-                if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS / 2)) {
-		            g_u8LEDCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]);
-                    g_u8LEDCallRedData = LED_OFF;
+                if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
+		            g_u8LedCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]);
+                    g_u8LedCallRedData = LED_OFF;
 		        }
-                if ((g_u8ActiveLED >= NUMBER_OF_LEDS / 2) &&
-                		(g_u8ActiveLED < NUMBER_OF_LEDS)) {
-                	g_u8LEDRespGreenData = (LED_ON <<
+                if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
+                		(g_u8ActiveLed < NUMBER_OF_LEDS)) {
+                	g_u8LedRespGreenData = (LED_ON <<
                 			g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1]);
-                	g_u8LEDRespRedData = LED_OFF;
+                	g_u8LedRespRedData = LED_OFF;
                 }
             }
 
             if (g_u8ActiveRowColor == RED_COLOR) {
-            	if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
-            		g_u8LEDCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
-            		g_u8LEDCallGreenData = LED_OFF;
+            	if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
+            		g_u8LedCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
+            		g_u8LedCallGreenData = LED_OFF;
             	}
-            	if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) &&
-            			(g_u8ActiveLED < NUMBER_OF_LEDS)) {
-            		g_u8LEDRespRedData = LED_ON <<
+            	if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
+            			(g_u8ActiveLed < NUMBER_OF_LEDS)) {
+            		g_u8LedRespRedData = LED_ON <<
             				g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
-            		g_u8LEDRespGreenData = LED_OFF;
+            		g_u8LedRespGreenData = LED_OFF;
             	}
             }
 
             if (g_u8ActiveRowColor == YELLOW_COLOR) {
-            	if ((g_u8ActiveLED >= 0) && (g_u8ActiveLED < NUMBER_OF_LEDS/2)) {
-            		g_u8LEDCallGreenData = LED_ON << g_au8GreenCalls[g_u8ActiveRow];
-            		g_u8LEDCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
+            	if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
+            		g_u8LedCallGreenData = LED_ON << g_au8GreenCalls[g_u8ActiveRow];
+            		g_u8LedCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
             	}
-            	if ((g_u8ActiveLED >= NUMBER_OF_LEDS/2) &&
-            			(g_u8ActiveLED < NUMBER_OF_LEDS)) {
-            		g_u8LEDRespGreenData = LED_ON <<
+            	if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
+            			(g_u8ActiveLed < NUMBER_OF_LEDS)) {
+            		g_u8LedRespGreenData = LED_ON <<
             				g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
-            		g_u8LEDRespRedData = LED_ON <<
+            		g_u8LedRespRedData = LED_ON <<
             				g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
             	}
             }
@@ -344,7 +342,8 @@ int main(void)
 
         if (g_u8StepNumber != 0) {
 
-/*для того, чтобы осталось перемигиваться раскомментить*/
+        	/*для того, чтобы осталось перемигиваться раскомментить*/
+
 	  /*g_u8BinaryGreen = g_u8BinaryGreen | (SR_DATA_bm << g_au8GreenCalls
         	[NUMBER_OF_LINES - g_u8StepNumber]);*/
 
@@ -353,39 +352,39 @@ int main(void)
 
         	if (g_u8ActiveRowColor == GREEN_COLOR) {
 
-        		g_u8LEDCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]) |
+        		g_u8LedCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]) |
         				(g_u8ColumnGreen);
-        		g_u8LEDRespGreenData = (LED_ON << g_au8GreenResponses
+        		g_u8LedRespGreenData = (LED_ON << g_au8GreenResponses
         				[NUMBER_OF_LINES - g_u8ActiveRow]) | (g_u8ColumnGreen);
-			  	g_u8LEDCallRedData = LED_OFF /*| (g_u8BinaryRed)*/;
-			  	g_u8LEDRespRedData = LED_OFF /*| (g_u8BinaryRed)*/;
+			  	g_u8LedCallRedData = LED_OFF /*| (g_u8BinaryRed)*/;
+			  	g_u8LedRespRedData = LED_OFF /*| (g_u8BinaryRed)*/;
         	}
         	if (g_u8ActiveRowColor == RED_COLOR) {
 
-        		g_u8LEDCallRedData = (LED_ON << g_au8RedCalls[g_u8ActiveRow]) |
+        		g_u8LedCallRedData = (LED_ON << g_au8RedCalls[g_u8ActiveRow]) |
         				(g_u8ColumnRed);
-        		g_u8LEDRespRedData = (LED_ON << g_au8RedResponses
+        		g_u8LedRespRedData = (LED_ON << g_au8RedResponses
         				[NUMBER_OF_LINES - g_u8ActiveRow]) | (g_u8ColumnRed);
-        		g_u8LEDCallGreenData = LED_OFF /*| (g_u8BinaryGreen)*/;
-        		g_u8LEDRespGreenData = LED_OFF /*| (g_u8BinaryGreen)*/;
+        		g_u8LedCallGreenData = LED_OFF /*| (g_u8BinaryGreen)*/;
+        		g_u8LedRespGreenData = LED_OFF /*| (g_u8BinaryGreen)*/;
         	}
         }
 
 
-	  //отобразили
+        //отобразили
 
-        if (g_u8NeedToDisplayLEDData) {
-        	ClearLEDSR();
-        	LoadLEDSR();
+        if (g_u8NeedToDisplayLedData) {
+        	clearLEDSR();
+        	loadLEDSR();
 
 
         	if (USE_TIMER) {
-        		g_u8NeedToDisplayLEDData = 0;
+        		g_u8NeedToDisplayLedData = 0;
         	}
-        	g_u8ActiveLED++;
-        	if (g_u8ActiveLED == NUMBER_OF_LEDS){
+        	g_u8ActiveLed++;
+        	if (g_u8ActiveLed == NUMBER_OF_LEDS) {
         		g_u8ActiveRowColor++;
-        		g_u8ActiveLED = 0;
+        		g_u8ActiveLed = 0;
         		if (g_u8ActiveRowColor == NUMBER_OF_COLORS) {
         			g_u8ActiveRowColor = 1;
 
@@ -415,41 +414,41 @@ int main(void)
 
         if (g_u8AllLinesUnicolor == GREEN_COLOR) {
 
-        	g_u8AllLEDCallGreenData = LED_ON;
-        	g_u8AllLEDRespGreenData = LED_ON;
-        	g_u8AllLEDCallRedData = LED_OFF;
-        	g_u8AllLEDRespRedData = LED_OFF;
+        	g_u8AllLedCallGreenData = LED_ON;
+        	g_u8AllLedRespGreenData = LED_ON;
+        	g_u8AllLedCallRedData = LED_OFF;
+        	g_u8AllLedRespRedData = LED_OFF;
         }
 
         if (g_u8AllLinesUnicolor == RED_COLOR) {
 
-        	g_u8AllLEDCallGreenData = LED_OFF;
-        	g_u8AllLEDRespGreenData = LED_OFF;
-        	g_u8AllLEDCallRedData = LED_ON;
-        	g_u8AllLEDRespRedData = LED_ON;
+        	g_u8AllLedCallGreenData = LED_OFF;
+        	g_u8AllLedRespGreenData = LED_OFF;
+        	g_u8AllLedCallRedData = LED_ON;
+        	g_u8AllLedRespRedData = LED_ON;
         }
 
         if (g_u8AllLinesUnicolor == YELLOW_COLOR) {
 
-        	/*так горит жёлтый, в зависимости от того, что OFF будет другой
-         	 	 цвет - цикл?? условие7??? чтобы по порядку с прерыванием*/
-        	g_u8AllLEDCallGreenData = LED_ON;
-        	g_u8AllLEDRespGreenData = LED_ON;
-        	g_u8AllLEDCallRedData = LED_ON;
-        	g_u8AllLEDRespRedData = LED_ON;
+        	/*так горит жёлтый, в зависимости от того, что OFF будет другой цвет -
+        	 	 	 * цикл?? условие7??? чтобы по порядку с прерыванием*/
+        	g_u8AllLedCallGreenData = LED_ON;
+        	g_u8AllLedRespGreenData = LED_ON;
+        	g_u8AllLedCallRedData = LED_ON;
+        	g_u8AllLedRespRedData = LED_ON;
         }
 
 
         if (g_u8DisplayAllLinesUnicolor) {
 
         	HAL_GPIO_WritePin(LED_CALL_GREEN_SR_DATA_GPIO_Port,
-        			LED_CALL_GREEN_SR_DATA_Pin, g_u8AllLEDCallGreenData);
+        			LED_CALL_GREEN_SR_DATA_Pin, g_u8AllLedCallGreenData);
         	HAL_GPIO_WritePin(LED_RESP_GREEN_SR_DATA_GPIO_Port,
-        			LED_RESP_GREEN_SR_DATA_Pin, g_u8AllLEDRespGreenData);
+        			LED_RESP_GREEN_SR_DATA_Pin, g_u8AllLedRespGreenData);
         	HAL_GPIO_WritePin(LED_CALL_RED_SR_DATA_GPIO_Port,
-        			LED_CALL_RED_SR_DATA_Pin, g_u8AllLEDCallRedData);
+        			LED_CALL_RED_SR_DATA_Pin, g_u8AllLedCallRedData);
         	HAL_GPIO_WritePin(LED_RESP_RED_SR_DATA_GPIO_Port,
-        			LED_RESP_RED_SR_DATA_Pin, g_u8AllLEDRespRedData);
+        			LED_RESP_RED_SR_DATA_Pin, g_u8AllLedRespRedData);
         	for (uint8_t n = 0; n < NUMBER_OF_LINES; n++) {
         		HAL_GPIO_WritePin(STP_SR_LED_CLK_GPIO_Port, STP_SR_LED_CLK_Pin,
         				GPIO_PIN_SET);
@@ -646,7 +645,7 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void ClearLEDSR(void) {
+void clearLEDSR(void) {
 
 	HAL_GPIO_WritePin(STP_SR_LED_nCLR_GPIO_Port, STP_SR_LED_nCLR_Pin,
 			GPIO_PIN_RESET);
@@ -654,47 +653,47 @@ void ClearLEDSR(void) {
 			GPIO_PIN_SET);
 }
 
-void LoadLEDSR(void) {
+void loadLEDSR(void) {
 
 	for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
         HAL_GPIO_WritePin(LED_CALL_GREEN_SR_DATA_GPIO_Port,
-        		LED_CALL_GREEN_SR_DATA_Pin, (g_u8LEDCallGreenData & SR_DATA_bm));
+        		LED_CALL_GREEN_SR_DATA_Pin, (g_u8LedCallGreenData & SR_DATA_bm));
 		HAL_GPIO_WritePin(LED_RESP_GREEN_SR_DATA_GPIO_Port,
-				LED_RESP_GREEN_SR_DATA_Pin, (g_u8LEDRespGreenData & SR_DATA_bm));
+				LED_RESP_GREEN_SR_DATA_Pin, (g_u8LedRespGreenData & SR_DATA_bm));
 		HAL_GPIO_WritePin(LED_CALL_RED_SR_DATA_GPIO_Port,
-				LED_CALL_RED_SR_DATA_Pin, (g_u8LEDCallRedData & SR_DATA_bm));
+				LED_CALL_RED_SR_DATA_Pin, (g_u8LedCallRedData & SR_DATA_bm));
 		HAL_GPIO_WritePin(LED_RESP_RED_SR_DATA_GPIO_Port,
-				LED_RESP_RED_SR_DATA_Pin, (g_u8LEDRespRedData & SR_DATA_bm));
+				LED_RESP_RED_SR_DATA_Pin, (g_u8LedRespRedData & SR_DATA_bm));
 
 		HAL_GPIO_WritePin(STP_SR_LED_CLK_GPIO_Port, STP_SR_LED_CLK_Pin,
 				GPIO_PIN_SET);
 		HAL_GPIO_WritePin(STP_SR_LED_CLK_GPIO_Port, STP_SR_LED_CLK_Pin,
 				GPIO_PIN_RESET);
 
-		g_u8LEDCallGreenData = g_u8LEDCallGreenData >> 1;
-		g_u8LEDRespGreenData = g_u8LEDRespGreenData >> 1;
-		g_u8LEDCallRedData = g_u8LEDCallRedData >> 1;
-		g_u8LEDRespRedData = g_u8LEDRespRedData >> 1;
+		g_u8LedCallGreenData = g_u8LedCallGreenData >> 1;
+		g_u8LedRespGreenData = g_u8LedRespGreenData >> 1;
+		g_u8LedCallRedData = g_u8LedCallRedData >> 1;
+		g_u8LedRespRedData = g_u8LedRespRedData >> 1;
 	}
 }
 
-void ClearCallSR(void) {
+void clearCallSR(void) {
 	HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
 			GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
 			GPIO_PIN_SET);
 }
 
-//void ChangeRowLEDSR(void){
+//void ChangeRowLEDSR(void) {
 //	ActiveRow++;
 //		  if (ActiveRow == NUMBER_OF_LINES) {
 //			  ActiveRow = 0;
 //		  }
 //}
 //
-//void ChangeColorLEDSR(void){
+//void ChangeColorLEDSR(void) {
 //	ActiveRowColor++;
-//	if (ActiveRowColor == NUMBER_OF_COLORS){
+//	if (ActiveRowColor == NUMBER_OF_COLORS) {
 //		ActiveRowColor = 0;
 //	}
 //}
@@ -703,7 +702,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
 	if (htim == &htim3)
 	{
-		g_u8NeedToDisplayLEDData = 1;
+		g_u8NeedToDisplayLedData = 1;
 
 
 	}
