@@ -402,7 +402,7 @@ int main(void)
  8000302:	f001 f86a 	bl	80013da <HAL_GPIO_WritePin>
         			GPIO_PIN_SET);
 
-            for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
+            for (uint8_t i = 0; i < NUMBER_OF_LINES - 1; i++) {
  8000306:	1dfb      	adds	r3, r7, #7
  8000308:	2200      	movs	r2, #0
  800030a:	701a      	strb	r2, [r3, #0]
@@ -420,7 +420,7 @@ int main(void)
  800031e:	2140      	movs	r1, #64	; 0x40
  8000320:	0018      	movs	r0, r3
  8000322:	f001 f85a 	bl	80013da <HAL_GPIO_WritePin>
-            for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
+            for (uint8_t i = 0; i < NUMBER_OF_LINES - 1; i++) {
  8000326:	1dfb      	adds	r3, r7, #7
  8000328:	781a      	ldrb	r2, [r3, #0]
  800032a:	1dfb      	adds	r3, r7, #7
@@ -428,7 +428,7 @@ int main(void)
  800032e:	701a      	strb	r2, [r3, #0]
  8000330:	1dfb      	adds	r3, r7, #7
  8000332:	781b      	ldrb	r3, [r3, #0]
- 8000334:	2b07      	cmp	r3, #7
+ 8000334:	2b06      	cmp	r3, #6
  8000336:	d9ea      	bls.n	800030e <main+0xf2>
             			GPIO_PIN_RESET);
             }

@@ -233,7 +233,7 @@ int main(void)
         	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
         			GPIO_PIN_SET);
 
-            for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
+            for (uint8_t i = 0; i < NUMBER_OF_LINES - 1; i++) {
             	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
             			GPIO_PIN_SET);
             	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
