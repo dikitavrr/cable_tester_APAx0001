@@ -64,8 +64,6 @@ uint8_t g_u8DisplayAllLinesUnicolor = 0;
 uint8_t g_u8ColumnGreen = 0b00000000;
 uint8_t g_u8ColumnRed = 0b00000000;
 
-uint32_t g_u32TimePeriod = 0;
-
 uint8_t g_u8NeedToDisplayLedData = 1;
 uint8_t g_u8NeedToDefineLedGreenData = 0;
 uint8_t g_u8NeedToDefineLedRedData = 0;
@@ -76,6 +74,7 @@ uint8_t g_u8NeedToRingLine = 1;
 RCC_ClkInitTypeDef sClokConfig;
 uint32_t g_u32Prescaler;
 uint32_t g_u32frequencyTim3;
+uint32_t g_u32TimePeriod = 0;
 
 uint8_t g_au8ResponsesData [NUMBER_OF_LINES][NUMBER_OF_LINES] = {
 		{0, 0, 0, 0, 0, 0, 0, 0},
@@ -255,7 +254,7 @@ int main(void)
 	        for (uint8_t g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
 	        		g_u8CallColumn++) {
 
-		        HAL_Delay(100);
+		        HAL_Delay(50);
 
 	        	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);

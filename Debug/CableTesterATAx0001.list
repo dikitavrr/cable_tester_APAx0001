@@ -471,8 +471,8 @@ int main(void)
  800036e:	e06e      	b.n	800044e <main+0x232>
 	        		g_u8CallColumn++) {
 
-		        HAL_Delay(100);
- 8000370:	2064      	movs	r0, #100	; 0x64
+		        HAL_Delay(50);
+ 8000370:	2032      	movs	r0, #50	; 0x32
  8000372:	f000 fd9b 	bl	8000eac <HAL_Delay>
 
 	        	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
@@ -547,9 +547,9 @@ int main(void)
  80003e8:	48000400 	.word	0x48000400
  80003ec:	2000004c 	.word	0x2000004c
  80003f0:	20000094 	.word	0x20000094
- 80003f4:	200000f4 	.word	0x200000f4
- 80003f8:	200000f0 	.word	0x200000f0
- 80003fc:	200000ec 	.word	0x200000ec
+ 80003f4:	200000f0 	.word	0x200000f0
+ 80003f8:	200000ec 	.word	0x200000ec
+ 80003fc:	200000f4 	.word	0x200000f4
  8000400:	20000003 	.word	0x20000003
  8000404:	200000f8 	.word	0x200000f8
 			        }

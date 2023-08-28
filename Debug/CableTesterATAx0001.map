@@ -3289,15 +3289,15 @@ LOAD C:/ST/STM32CubeIDE_1.13.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x00000000200000e9        0x1 ./Core/Src/main.o
                 0x00000000200000e9                g_u8ColumnRed
  *fill*         0x00000000200000ea        0x2 
- .bss.g_u32TimePeriod
-                0x00000000200000ec        0x4 ./Core/Src/main.o
-                0x00000000200000ec                g_u32TimePeriod
  .bss.g_u32Prescaler
-                0x00000000200000f0        0x4 ./Core/Src/main.o
-                0x00000000200000f0                g_u32Prescaler
+                0x00000000200000ec        0x4 ./Core/Src/main.o
+                0x00000000200000ec                g_u32Prescaler
  .bss.g_u32frequencyTim3
+                0x00000000200000f0        0x4 ./Core/Src/main.o
+                0x00000000200000f0                g_u32frequencyTim3
+ .bss.g_u32TimePeriod
                 0x00000000200000f4        0x4 ./Core/Src/main.o
-                0x00000000200000f4                g_u32frequencyTim3
+                0x00000000200000f4                g_u32TimePeriod
  .bss.g_au8ResponsesData
                 0x00000000200000f8       0x40 ./Core/Src/main.o
                 0x00000000200000f8                g_au8ResponsesData
