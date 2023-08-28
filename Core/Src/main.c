@@ -242,19 +242,17 @@ int main(void)
 
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_RESET);
-	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
-	        		GPIO_PIN_SET);
-	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
-	        		GPIO_PIN_RESET);
 
-        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
-        			GPIO_PIN_SET);
+        	HAL_Delay(50);
 
             /*сюда флаг для таймера?*/
 	        for (uint8_t u8CallColumn = 0; u8CallColumn < NUMBER_OF_LINES;
 	        		u8CallColumn++) {
 
-	        	HAL_Delay(50);
+		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
+		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
 
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
@@ -268,8 +266,6 @@ int main(void)
 		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 			        HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
 			        		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
-		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
-		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 
 			        if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
 			        		LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
@@ -280,15 +276,9 @@ int main(void)
 			        }
 
 		        }
-		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
-		        if(u8CallColumn == NUMBER_OF_LINES - 1) {
-		        	break;
-		        }
-		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
-		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
 
+	        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
+	        			LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 	        }
         }
 
