@@ -251,18 +251,18 @@ int main(void)
         			GPIO_PIN_SET);
 
             /*сюда флаг для таймера?*/
-	        for (uint8_t g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
-	        		g_u8CallColumn++) {
+	        for (uint8_t u8CallColumn = 0; u8CallColumn < NUMBER_OF_LINES;
+	        		u8CallColumn++) {
 
-		        HAL_Delay(50);
+	        	HAL_Delay(50);
 
-	        	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
+		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
 
-		        for (uint8_t g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
-		        		g_u8RespString++) {
+		        for (uint8_t u8RespString = 0; u8RespString < NUMBER_OF_LINES;
+		        		u8RespString++) {
 
 		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
 		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
@@ -273,15 +273,17 @@ int main(void)
 
 			        if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
 			        		LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
-				        g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 1;
+				        g_au8ResponsesData[u8CallColumn][u8RespString] = 1;
 			        }
 			        else {
-				        g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 0;
+				        g_au8ResponsesData[u8CallColumn][u8RespString] = 0;
 			        }
 
 		        }
 		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
-
+		        if(u8CallColumn == 7) {
+		        	break;
+		        }
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
@@ -645,7 +647,8 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void clearLEDSR(void) {
+void clearLEDSR(void)
+{
 
 	HAL_GPIO_WritePin(STP_SR_LED_nCLR_GPIO_Port, STP_SR_LED_nCLR_Pin,
 			GPIO_PIN_RESET);
@@ -653,7 +656,8 @@ void clearLEDSR(void) {
 			GPIO_PIN_SET);
 }
 
-void loadLEDSR(void) {
+void loadLEDSR(void)
+{
 
 	for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
         HAL_GPIO_WritePin(LED_CALL_GREEN_SR_DATA_GPIO_Port,
@@ -677,35 +681,38 @@ void loadLEDSR(void) {
 	}
 }
 
-void clearCallSR(void) {
+void clearCallSR(void)
+{
 	HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
 			GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
 			GPIO_PIN_SET);
 }
 
-//void ChangeRowLEDSR(void) {
+//void ChangeRowLEDSR(void)
+//{
 //	ActiveRow++;
 //		  if (ActiveRow == NUMBER_OF_LINES) {
 //			  ActiveRow = 0;
 //		  }
 //}
 //
-//void ChangeColorLEDSR(void) {
+//void ChangeColorLEDSR(void)
+//{
 //	ActiveRowColor++;
 //	if (ActiveRowColor == NUMBER_OF_COLORS) {
 //		ActiveRowColor = 0;
 //	}
 //}
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
 
 	if (htim == &htim3)
 	{
 		g_u8NeedToDisplayLedData = 1;
-
-
 	}
+
 	if (htim == &htim6)
 	{
 		/**/
