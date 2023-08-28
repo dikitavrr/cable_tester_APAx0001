@@ -39,9 +39,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  00019e90  00000000  00000000  0002a09d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0000a154  00000000  00000000  00043f2d  2**0
+ 18 .debug_line   0000a152  00000000  00000000  00043f2d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000a0522  00000000  00000000  0004e081  2**0
+ 19 .debug_str    000a0522  00000000  00000000  0004e07f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  20 .debug_frame  00001f8c  00000000  00000000  000ee5a4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -285,21 +285,21 @@ int main(void)
     		GPIO_PIN_RESET);
     //Установить все линии в первоначальное положение прозвонки и чтения
     HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 8000252:	4b62      	ldr	r3, [pc, #392]	; (80003dc <main+0x1c0>)
+ 8000252:	4b65      	ldr	r3, [pc, #404]	; (80003e8 <main+0x1cc>)
  8000254:	2200      	movs	r2, #0
  8000256:	2140      	movs	r1, #64	; 0x40
  8000258:	0018      	movs	r0, r3
  800025a:	f001 f8be 	bl	80013da <HAL_GPIO_WritePin>
     		GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin,
- 800025e:	4b5f      	ldr	r3, [pc, #380]	; (80003dc <main+0x1c0>)
+ 800025e:	4b62      	ldr	r3, [pc, #392]	; (80003e8 <main+0x1cc>)
  8000260:	2200      	movs	r2, #0
  8000262:	2108      	movs	r1, #8
  8000264:	0018      	movs	r0, r3
  8000266:	f001 f8b8 	bl	80013da <HAL_GPIO_WritePin>
     		GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
- 800026a:	4b5c      	ldr	r3, [pc, #368]	; (80003dc <main+0x1c0>)
+ 800026a:	4b5f      	ldr	r3, [pc, #380]	; (80003e8 <main+0x1cc>)
  800026c:	2201      	movs	r2, #1
  800026e:	2120      	movs	r1, #32
  8000270:	0018      	movs	r0, r3
@@ -322,11 +322,11 @@ int main(void)
     // Запустить таймер
     if (USE_TIMER) {
         HAL_TIM_Base_Start_IT(&htim3);
- 800028e:	4b54      	ldr	r3, [pc, #336]	; (80003e0 <main+0x1c4>)
+ 800028e:	4b57      	ldr	r3, [pc, #348]	; (80003ec <main+0x1d0>)
  8000290:	0018      	movs	r0, r3
  8000292:	f001 fe01 	bl	8001e98 <HAL_TIM_Base_Start_IT>
         HAL_TIM_Base_Start_IT(&htim6);
- 8000296:	4b53      	ldr	r3, [pc, #332]	; (80003e4 <main+0x1c8>)
+ 8000296:	4b56      	ldr	r3, [pc, #344]	; (80003f0 <main+0x1d4>)
  8000298:	0018      	movs	r0, r3
  800029a:	f001 fdfd 	bl	8001e98 <HAL_TIM_Base_Start_IT>
     }
@@ -336,22 +336,22 @@ int main(void)
     g_u32frequencyTim3 = HAL_RCC_GetPCLK1Freq();
  800029e:	f001 fd95 	bl	8001dcc <HAL_RCC_GetPCLK1Freq>
  80002a2:	0002      	movs	r2, r0
- 80002a4:	4b50      	ldr	r3, [pc, #320]	; (80003e8 <main+0x1cc>)
+ 80002a4:	4b53      	ldr	r3, [pc, #332]	; (80003f4 <main+0x1d8>)
  80002a6:	601a      	str	r2, [r3, #0]
 
     g_u32Prescaler = htim3.Init.Prescaler;
- 80002a8:	4b4d      	ldr	r3, [pc, #308]	; (80003e0 <main+0x1c4>)
+ 80002a8:	4b50      	ldr	r3, [pc, #320]	; (80003ec <main+0x1d0>)
  80002aa:	685a      	ldr	r2, [r3, #4]
- 80002ac:	4b4f      	ldr	r3, [pc, #316]	; (80003ec <main+0x1d0>)
+ 80002ac:	4b52      	ldr	r3, [pc, #328]	; (80003f8 <main+0x1dc>)
  80002ae:	601a      	str	r2, [r3, #0]
     g_u32TimePeriod = ((g_u32frequencyTim3 * TIME_BLINKING_LED_MS) /
- 80002b0:	4b4d      	ldr	r3, [pc, #308]	; (80003e8 <main+0x1cc>)
+ 80002b0:	4b50      	ldr	r3, [pc, #320]	; (80003f4 <main+0x1d8>)
  80002b2:	681b      	ldr	r3, [r3, #0]
  80002b4:	2264      	movs	r2, #100	; 0x64
  80002b6:	435a      	muls	r2, r3
  80002b8:	0010      	movs	r0, r2
     		((g_u32Prescaler + 1) * 1000)) - 1;
- 80002ba:	4b4c      	ldr	r3, [pc, #304]	; (80003ec <main+0x1d0>)
+ 80002ba:	4b4f      	ldr	r3, [pc, #316]	; (80003f8 <main+0x1dc>)
  80002bc:	681b      	ldr	r3, [r3, #0]
  80002be:	1c5a      	adds	r2, r3, #1
  80002c0:	0013      	movs	r3, r2
@@ -367,25 +367,25 @@ int main(void)
     		((g_u32Prescaler + 1) * 1000)) - 1;
  80002d4:	1e5a      	subs	r2, r3, #1
     g_u32TimePeriod = ((g_u32frequencyTim3 * TIME_BLINKING_LED_MS) /
- 80002d6:	4b46      	ldr	r3, [pc, #280]	; (80003f0 <main+0x1d4>)
+ 80002d6:	4b49      	ldr	r3, [pc, #292]	; (80003fc <main+0x1e0>)
  80002d8:	601a      	str	r2, [r3, #0]
     __HAL_TIM_SET_AUTORELOAD(&htim3, g_u32TimePeriod);
- 80002da:	4b41      	ldr	r3, [pc, #260]	; (80003e0 <main+0x1c4>)
+ 80002da:	4b44      	ldr	r3, [pc, #272]	; (80003ec <main+0x1d0>)
  80002dc:	681b      	ldr	r3, [r3, #0]
- 80002de:	4a44      	ldr	r2, [pc, #272]	; (80003f0 <main+0x1d4>)
+ 80002de:	4a47      	ldr	r2, [pc, #284]	; (80003fc <main+0x1e0>)
  80002e0:	6812      	ldr	r2, [r2, #0]
  80002e2:	62da      	str	r2, [r3, #44]	; 0x2c
- 80002e4:	4b42      	ldr	r3, [pc, #264]	; (80003f0 <main+0x1d4>)
+ 80002e4:	4b45      	ldr	r3, [pc, #276]	; (80003fc <main+0x1e0>)
  80002e6:	681a      	ldr	r2, [r3, #0]
- 80002e8:	4b3d      	ldr	r3, [pc, #244]	; (80003e0 <main+0x1c4>)
+ 80002e8:	4b40      	ldr	r3, [pc, #256]	; (80003ec <main+0x1d0>)
  80002ea:	60da      	str	r2, [r3, #12]
     /* USER CODE BEGIN 3 */
 
     		/*ringing of lines*/
-    		/*хочу чтобы 00000001 прошёл поочерёдно по 8 линиям и
+    		/*хочу чтобы 01111111 прошёл поочерёдно по 8 линиям и
     		 	 	 * результат записался в двумерный массив*/
         if (g_u8NeedToRingLine) {
- 80002ec:	4b41      	ldr	r3, [pc, #260]	; (80003f4 <main+0x1d8>)
+ 80002ec:	4b44      	ldr	r3, [pc, #272]	; (8000400 <main+0x1e4>)
  80002ee:	781b      	ldrb	r3, [r3, #0]
  80002f0:	2b00      	cmp	r3, #0
  80002f2:	d100      	bne.n	80002f6 <main+0xda>
@@ -394,27 +394,28 @@ int main(void)
             clearCallSR();
  80002f6:	f000 fc81 	bl	8000bfc <clearCallSR>
 
+        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+ 80002fa:	4b3b      	ldr	r3, [pc, #236]	; (80003e8 <main+0x1cc>)
+ 80002fc:	2201      	movs	r2, #1
+ 80002fe:	2180      	movs	r1, #128	; 0x80
+ 8000300:	0018      	movs	r0, r3
+ 8000302:	f001 f86a 	bl	80013da <HAL_GPIO_WritePin>
+        			GPIO_PIN_SET);
+
             for (uint8_t i = 0; i < NUMBER_OF_LINES; i++) {
- 80002fa:	1dfb      	adds	r3, r7, #7
- 80002fc:	2200      	movs	r2, #0
- 80002fe:	701a      	strb	r2, [r3, #0]
- 8000300:	e016      	b.n	8000330 <main+0x114>
-            	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
- 8000302:	4b36      	ldr	r3, [pc, #216]	; (80003dc <main+0x1c0>)
- 8000304:	2201      	movs	r2, #1
- 8000306:	2180      	movs	r1, #128	; 0x80
- 8000308:	0018      	movs	r0, r3
- 800030a:	f001 f866 	bl	80013da <HAL_GPIO_WritePin>
-	                GPIO_PIN_SET);
+ 8000306:	1dfb      	adds	r3, r7, #7
+ 8000308:	2200      	movs	r2, #0
+ 800030a:	701a      	strb	r2, [r3, #0]
+ 800030c:	e010      	b.n	8000330 <main+0x114>
             	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 800030e:	4b33      	ldr	r3, [pc, #204]	; (80003dc <main+0x1c0>)
+ 800030e:	4b36      	ldr	r3, [pc, #216]	; (80003e8 <main+0x1cc>)
  8000310:	2201      	movs	r2, #1
  8000312:	2140      	movs	r1, #64	; 0x40
  8000314:	0018      	movs	r0, r3
  8000316:	f001 f860 	bl	80013da <HAL_GPIO_WritePin>
-	        		GPIO_PIN_SET);
+            			GPIO_PIN_SET);
             	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 800031a:	4b30      	ldr	r3, [pc, #192]	; (80003dc <main+0x1c0>)
+ 800031a:	4b33      	ldr	r3, [pc, #204]	; (80003e8 <main+0x1cc>)
  800031c:	2200      	movs	r2, #0
  800031e:	2140      	movs	r1, #64	; 0x40
  8000320:	0018      	movs	r0, r3
@@ -428,157 +429,157 @@ int main(void)
  8000330:	1dfb      	adds	r3, r7, #7
  8000332:	781b      	ldrb	r3, [r3, #0]
  8000334:	2b07      	cmp	r3, #7
- 8000336:	d9e4      	bls.n	8000302 <main+0xe6>
-	        		GPIO_PIN_RESET);
+ 8000336:	d9ea      	bls.n	800030e <main+0xf2>
+            			GPIO_PIN_RESET);
             }
 
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
- 8000338:	4b28      	ldr	r3, [pc, #160]	; (80003dc <main+0x1c0>)
+ 8000338:	4b2b      	ldr	r3, [pc, #172]	; (80003e8 <main+0x1cc>)
  800033a:	2200      	movs	r2, #0
  800033c:	2180      	movs	r1, #128	; 0x80
  800033e:	0018      	movs	r0, r3
  8000340:	f001 f84b 	bl	80013da <HAL_GPIO_WritePin>
 	                GPIO_PIN_RESET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 8000344:	4b25      	ldr	r3, [pc, #148]	; (80003dc <main+0x1c0>)
+ 8000344:	4b28      	ldr	r3, [pc, #160]	; (80003e8 <main+0x1cc>)
  8000346:	2201      	movs	r2, #1
  8000348:	2140      	movs	r1, #64	; 0x40
  800034a:	0018      	movs	r0, r3
  800034c:	f001 f845 	bl	80013da <HAL_GPIO_WritePin>
 	        		GPIO_PIN_SET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 8000350:	4b22      	ldr	r3, [pc, #136]	; (80003dc <main+0x1c0>)
+ 8000350:	4b25      	ldr	r3, [pc, #148]	; (80003e8 <main+0x1cc>)
  8000352:	2200      	movs	r2, #0
  8000354:	2140      	movs	r1, #64	; 0x40
  8000356:	0018      	movs	r0, r3
  8000358:	f001 f83f 	bl	80013da <HAL_GPIO_WritePin>
 	        		GPIO_PIN_RESET);
 
+        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+ 800035c:	4b22      	ldr	r3, [pc, #136]	; (80003e8 <main+0x1cc>)
+ 800035e:	2201      	movs	r2, #1
+ 8000360:	2180      	movs	r1, #128	; 0x80
+ 8000362:	0018      	movs	r0, r3
+ 8000364:	f001 f839 	bl	80013da <HAL_GPIO_WritePin>
+        			GPIO_PIN_SET);
+
             /*сюда флаг для таймера?*/
 	        for (uint8_t g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
- 800035c:	1dbb      	adds	r3, r7, #6
- 800035e:	2200      	movs	r2, #0
- 8000360:	701a      	strb	r2, [r3, #0]
- 8000362:	e074      	b.n	800044e <main+0x232>
+ 8000368:	1dbb      	adds	r3, r7, #6
+ 800036a:	2200      	movs	r2, #0
+ 800036c:	701a      	strb	r2, [r3, #0]
+ 800036e:	e06e      	b.n	800044e <main+0x232>
 	        		g_u8CallColumn++) {
 
 		        HAL_Delay(100);
- 8000364:	2064      	movs	r0, #100	; 0x64
- 8000366:	f000 fda1 	bl	8000eac <HAL_Delay>
+ 8000370:	2064      	movs	r0, #100	; 0x64
+ 8000372:	f000 fd9b 	bl	8000eac <HAL_Delay>
 
 	        	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
- 800036a:	2380      	movs	r3, #128	; 0x80
- 800036c:	0219      	lsls	r1, r3, #8
- 800036e:	2390      	movs	r3, #144	; 0x90
- 8000370:	05db      	lsls	r3, r3, #23
- 8000372:	2200      	movs	r2, #0
- 8000374:	0018      	movs	r0, r3
- 8000376:	f001 f830 	bl	80013da <HAL_GPIO_WritePin>
+ 8000376:	2380      	movs	r3, #128	; 0x80
+ 8000378:	0219      	lsls	r1, r3, #8
+ 800037a:	2390      	movs	r3, #144	; 0x90
+ 800037c:	05db      	lsls	r3, r3, #23
+ 800037e:	2200      	movs	r2, #0
+ 8000380:	0018      	movs	r0, r3
+ 8000382:	f001 f82a 	bl	80013da <HAL_GPIO_WritePin>
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
- 800037a:	2380      	movs	r3, #128	; 0x80
- 800037c:	0219      	lsls	r1, r3, #8
- 800037e:	2390      	movs	r3, #144	; 0x90
- 8000380:	05db      	lsls	r3, r3, #23
- 8000382:	2201      	movs	r2, #1
- 8000384:	0018      	movs	r0, r3
- 8000386:	f001 f828 	bl	80013da <HAL_GPIO_WritePin>
-		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
-
-		        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
- 800038a:	4b14      	ldr	r3, [pc, #80]	; (80003dc <main+0x1c0>)
- 800038c:	2201      	movs	r2, #1
- 800038e:	2180      	movs	r1, #128	; 0x80
+ 8000386:	2380      	movs	r3, #128	; 0x80
+ 8000388:	0219      	lsls	r1, r3, #8
+ 800038a:	2390      	movs	r3, #144	; 0x90
+ 800038c:	05db      	lsls	r3, r3, #23
+ 800038e:	2201      	movs	r2, #1
  8000390:	0018      	movs	r0, r3
  8000392:	f001 f822 	bl	80013da <HAL_GPIO_WritePin>
-		        		LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
+		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
 
 		        for (uint8_t g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
  8000396:	1d7b      	adds	r3, r7, #5
  8000398:	2200      	movs	r2, #0
  800039a:	701a      	strb	r2, [r3, #0]
- 800039c:	e03c      	b.n	8000418 <main+0x1fc>
+ 800039c:	e042      	b.n	8000424 <main+0x208>
 		        		g_u8RespString++) {
 
 		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
- 800039e:	4b0f      	ldr	r3, [pc, #60]	; (80003dc <main+0x1c0>)
+ 800039e:	4b12      	ldr	r3, [pc, #72]	; (80003e8 <main+0x1cc>)
  80003a0:	2201      	movs	r2, #1
  80003a2:	2108      	movs	r1, #8
  80003a4:	0018      	movs	r0, r3
  80003a6:	f001 f818 	bl	80013da <HAL_GPIO_WritePin>
 		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 			        HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
- 80003aa:	4b0c      	ldr	r3, [pc, #48]	; (80003dc <main+0x1c0>)
+ 80003aa:	4b0f      	ldr	r3, [pc, #60]	; (80003e8 <main+0x1cc>)
  80003ac:	2200      	movs	r2, #0
  80003ae:	2108      	movs	r1, #8
  80003b0:	0018      	movs	r0, r3
  80003b2:	f001 f812 	bl	80013da <HAL_GPIO_WritePin>
 			        		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
+		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
+ 80003b6:	4b0c      	ldr	r3, [pc, #48]	; (80003e8 <main+0x1cc>)
+ 80003b8:	2201      	movs	r2, #1
+ 80003ba:	2108      	movs	r1, #8
+ 80003bc:	0018      	movs	r0, r3
+ 80003be:	f001 f80c 	bl	80013da <HAL_GPIO_WritePin>
+		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 
 			        if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
- 80003b6:	4b09      	ldr	r3, [pc, #36]	; (80003dc <main+0x1c0>)
- 80003b8:	2110      	movs	r1, #16
- 80003ba:	0018      	movs	r0, r3
- 80003bc:	f000 fff0 	bl	80013a0 <HAL_GPIO_ReadPin>
- 80003c0:	0003      	movs	r3, r0
- 80003c2:	2b01      	cmp	r3, #1
- 80003c4:	d11a      	bne.n	80003fc <main+0x1e0>
+ 80003c2:	4b09      	ldr	r3, [pc, #36]	; (80003e8 <main+0x1cc>)
+ 80003c4:	2110      	movs	r1, #16
+ 80003c6:	0018      	movs	r0, r3
+ 80003c8:	f000 ffea 	bl	80013a0 <HAL_GPIO_ReadPin>
+ 80003cc:	0003      	movs	r3, r0
+ 80003ce:	2b01      	cmp	r3, #1
+ 80003d0:	d11a      	bne.n	8000408 <main+0x1ec>
 			        		LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
 				        g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 1;
- 80003c6:	1dbb      	adds	r3, r7, #6
- 80003c8:	781a      	ldrb	r2, [r3, #0]
- 80003ca:	1d7b      	adds	r3, r7, #5
- 80003cc:	781b      	ldrb	r3, [r3, #0]
- 80003ce:	490a      	ldr	r1, [pc, #40]	; (80003f8 <main+0x1dc>)
- 80003d0:	00d2      	lsls	r2, r2, #3
- 80003d2:	188a      	adds	r2, r1, r2
- 80003d4:	2101      	movs	r1, #1
- 80003d6:	54d1      	strb	r1, [r2, r3]
- 80003d8:	e019      	b.n	800040e <main+0x1f2>
- 80003da:	46c0      	nop			; (mov r8, r8)
- 80003dc:	48000400 	.word	0x48000400
- 80003e0:	2000004c 	.word	0x2000004c
- 80003e4:	20000094 	.word	0x20000094
- 80003e8:	200000f4 	.word	0x200000f4
- 80003ec:	200000f0 	.word	0x200000f0
- 80003f0:	200000ec 	.word	0x200000ec
- 80003f4:	20000003 	.word	0x20000003
- 80003f8:	200000f8 	.word	0x200000f8
+ 80003d2:	1dbb      	adds	r3, r7, #6
+ 80003d4:	781a      	ldrb	r2, [r3, #0]
+ 80003d6:	1d7b      	adds	r3, r7, #5
+ 80003d8:	781b      	ldrb	r3, [r3, #0]
+ 80003da:	490a      	ldr	r1, [pc, #40]	; (8000404 <main+0x1e8>)
+ 80003dc:	00d2      	lsls	r2, r2, #3
+ 80003de:	188a      	adds	r2, r1, r2
+ 80003e0:	2101      	movs	r1, #1
+ 80003e2:	54d1      	strb	r1, [r2, r3]
+ 80003e4:	e019      	b.n	800041a <main+0x1fe>
+ 80003e6:	46c0      	nop			; (mov r8, r8)
+ 80003e8:	48000400 	.word	0x48000400
+ 80003ec:	2000004c 	.word	0x2000004c
+ 80003f0:	20000094 	.word	0x20000094
+ 80003f4:	200000f4 	.word	0x200000f4
+ 80003f8:	200000f0 	.word	0x200000f0
+ 80003fc:	200000ec 	.word	0x200000ec
+ 8000400:	20000003 	.word	0x20000003
+ 8000404:	200000f8 	.word	0x200000f8
 			        }
 			        else {
 				        g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 0;
- 80003fc:	1dbb      	adds	r3, r7, #6
- 80003fe:	781a      	ldrb	r2, [r3, #0]
- 8000400:	1d7b      	adds	r3, r7, #5
- 8000402:	781b      	ldrb	r3, [r3, #0]
- 8000404:	49e0      	ldr	r1, [pc, #896]	; (8000788 <main+0x56c>)
- 8000406:	00d2      	lsls	r2, r2, #3
- 8000408:	188a      	adds	r2, r1, r2
- 800040a:	2100      	movs	r1, #0
- 800040c:	54d1      	strb	r1, [r2, r3]
+ 8000408:	1dbb      	adds	r3, r7, #6
+ 800040a:	781a      	ldrb	r2, [r3, #0]
+ 800040c:	1d7b      	adds	r3, r7, #5
+ 800040e:	781b      	ldrb	r3, [r3, #0]
+ 8000410:	49dd      	ldr	r1, [pc, #884]	; (8000788 <main+0x56c>)
+ 8000412:	00d2      	lsls	r2, r2, #3
+ 8000414:	188a      	adds	r2, r1, r2
+ 8000416:	2100      	movs	r1, #0
+ 8000418:	54d1      	strb	r1, [r2, r3]
 		        		g_u8RespString++) {
- 800040e:	1d7b      	adds	r3, r7, #5
- 8000410:	781a      	ldrb	r2, [r3, #0]
- 8000412:	1d7b      	adds	r3, r7, #5
- 8000414:	3201      	adds	r2, #1
- 8000416:	701a      	strb	r2, [r3, #0]
+ 800041a:	1d7b      	adds	r3, r7, #5
+ 800041c:	781a      	ldrb	r2, [r3, #0]
+ 800041e:	1d7b      	adds	r3, r7, #5
+ 8000420:	3201      	adds	r2, #1
+ 8000422:	701a      	strb	r2, [r3, #0]
 		        for (uint8_t g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
- 8000418:	1d7b      	adds	r3, r7, #5
- 800041a:	781b      	ldrb	r3, [r3, #0]
- 800041c:	2b07      	cmp	r3, #7
- 800041e:	d9be      	bls.n	800039e <main+0x182>
+ 8000424:	1d7b      	adds	r3, r7, #5
+ 8000426:	781b      	ldrb	r3, [r3, #0]
+ 8000428:	2b07      	cmp	r3, #7
+ 800042a:	d9b8      	bls.n	800039e <main+0x182>
 			        }
 
 		        }
 		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
 
-		        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
- 8000420:	4bda      	ldr	r3, [pc, #872]	; (800078c <main+0x570>)
- 8000422:	2201      	movs	r2, #1
- 8000424:	2180      	movs	r1, #128	; 0x80
- 8000426:	0018      	movs	r0, r3
- 8000428:	f000 ffd7 	bl	80013da <HAL_GPIO_WritePin>
-		        		LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
  800042c:	4bd7      	ldr	r3, [pc, #860]	; (800078c <main+0x570>)
  800042e:	2201      	movs	r2, #1
@@ -602,7 +603,7 @@ int main(void)
  800044e:	1dbb      	adds	r3, r7, #6
  8000450:	781b      	ldrb	r3, [r3, #0]
  8000452:	2b07      	cmp	r3, #7
- 8000454:	d986      	bls.n	8000364 <main+0x148>
+ 8000454:	d98c      	bls.n	8000370 <main+0x154>
         /* data processing */
         //хочу чтобы двумерный массив обработался и
         //на основе обработки сгенерировались данные для отображения
