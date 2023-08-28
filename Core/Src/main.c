@@ -281,9 +281,9 @@ int main(void)
 
 		        }
 		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
-//		        if(u8CallColumn == 7) {
-//		        	break;
-//		        }
+		        if(u8CallColumn == 7) {
+		        	break;
+		        }
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
