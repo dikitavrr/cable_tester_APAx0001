@@ -570,7 +570,7 @@ int main(void)
 
 		        }
 		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
-		        if(u8CallColumn == 7) {
+		        if(u8CallColumn == NUMBER_OF_LINES - 1) {
  800040a:	1dbb      	adds	r3, r7, #6
  800040c:	781b      	ldrb	r3, [r3, #0]
  800040e:	2b07      	cmp	r3, #7
