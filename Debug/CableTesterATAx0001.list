@@ -39,13 +39,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  00019e90  00000000  00000000  0002a09d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0000a158  00000000  00000000  00043f2d  2**0
+ 18 .debug_line   0000a152  00000000  00000000  00043f2d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000a051e  00000000  00000000  0004e085  2**0
+ 19 .debug_str    000a051e  00000000  00000000  0004e07f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00001f8c  00000000  00000000  000ee5a4  2**2
+ 20 .debug_frame  00001f8c  00000000  00000000  000ee5a0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000067  00000000  00000000  000f0530  2**0
+ 21 .debug_line_str 00000067  00000000  00000000  000f052c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -285,21 +285,21 @@ int main(void)
     		GPIO_PIN_RESET);
     //Установить все линии в первоначальное положение прозвонки и чтения
     HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 8000252:	4b7b      	ldr	r3, [pc, #492]	; (8000440 <main+0x224>)
+ 8000252:	4b65      	ldr	r3, [pc, #404]	; (80003e8 <main+0x1cc>)
  8000254:	2200      	movs	r2, #0
  8000256:	2140      	movs	r1, #64	; 0x40
  8000258:	0018      	movs	r0, r3
  800025a:	f001 f8be 	bl	80013da <HAL_GPIO_WritePin>
     		GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port, LINE_RESPONSE_SR_CLK_Pin,
- 800025e:	4b78      	ldr	r3, [pc, #480]	; (8000440 <main+0x224>)
+ 800025e:	4b62      	ldr	r3, [pc, #392]	; (80003e8 <main+0x1cc>)
  8000260:	2200      	movs	r2, #0
  8000262:	2108      	movs	r1, #8
  8000264:	0018      	movs	r0, r3
  8000266:	f001 f8b8 	bl	80013da <HAL_GPIO_WritePin>
     		GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
- 800026a:	4b75      	ldr	r3, [pc, #468]	; (8000440 <main+0x224>)
+ 800026a:	4b5f      	ldr	r3, [pc, #380]	; (80003e8 <main+0x1cc>)
  800026c:	2201      	movs	r2, #1
  800026e:	2120      	movs	r1, #32
  8000270:	0018      	movs	r0, r3
@@ -322,11 +322,11 @@ int main(void)
     // Запустить таймер
     if (USE_TIMER) {
         HAL_TIM_Base_Start_IT(&htim3);
- 800028e:	4b6d      	ldr	r3, [pc, #436]	; (8000444 <main+0x228>)
+ 800028e:	4b57      	ldr	r3, [pc, #348]	; (80003ec <main+0x1d0>)
  8000290:	0018      	movs	r0, r3
  8000292:	f001 fe01 	bl	8001e98 <HAL_TIM_Base_Start_IT>
         HAL_TIM_Base_Start_IT(&htim6);
- 8000296:	4b6c      	ldr	r3, [pc, #432]	; (8000448 <main+0x22c>)
+ 8000296:	4b56      	ldr	r3, [pc, #344]	; (80003f0 <main+0x1d4>)
  8000298:	0018      	movs	r0, r3
  800029a:	f001 fdfd 	bl	8001e98 <HAL_TIM_Base_Start_IT>
     }
@@ -336,22 +336,22 @@ int main(void)
     g_u32frequencyTim3 = HAL_RCC_GetPCLK1Freq();
  800029e:	f001 fd95 	bl	8001dcc <HAL_RCC_GetPCLK1Freq>
  80002a2:	0002      	movs	r2, r0
- 80002a4:	4b69      	ldr	r3, [pc, #420]	; (800044c <main+0x230>)
+ 80002a4:	4b53      	ldr	r3, [pc, #332]	; (80003f4 <main+0x1d8>)
  80002a6:	601a      	str	r2, [r3, #0]
 
     g_u32Prescaler = htim3.Init.Prescaler;
- 80002a8:	4b66      	ldr	r3, [pc, #408]	; (8000444 <main+0x228>)
+ 80002a8:	4b50      	ldr	r3, [pc, #320]	; (80003ec <main+0x1d0>)
  80002aa:	685a      	ldr	r2, [r3, #4]
- 80002ac:	4b68      	ldr	r3, [pc, #416]	; (8000450 <main+0x234>)
+ 80002ac:	4b52      	ldr	r3, [pc, #328]	; (80003f8 <main+0x1dc>)
  80002ae:	601a      	str	r2, [r3, #0]
     g_u32TimePeriod = ((g_u32frequencyTim3 * TIME_BLINKING_LED_MS) /
- 80002b0:	4b66      	ldr	r3, [pc, #408]	; (800044c <main+0x230>)
+ 80002b0:	4b50      	ldr	r3, [pc, #320]	; (80003f4 <main+0x1d8>)
  80002b2:	681b      	ldr	r3, [r3, #0]
  80002b4:	2264      	movs	r2, #100	; 0x64
  80002b6:	435a      	muls	r2, r3
  80002b8:	0010      	movs	r0, r2
     		((g_u32Prescaler + 1) * 1000)) - 1;
- 80002ba:	4b65      	ldr	r3, [pc, #404]	; (8000450 <main+0x234>)
+ 80002ba:	4b4f      	ldr	r3, [pc, #316]	; (80003f8 <main+0x1dc>)
  80002bc:	681b      	ldr	r3, [r3, #0]
  80002be:	1c5a      	adds	r2, r3, #1
  80002c0:	0013      	movs	r3, r2
@@ -367,17 +367,17 @@ int main(void)
     		((g_u32Prescaler + 1) * 1000)) - 1;
  80002d4:	1e5a      	subs	r2, r3, #1
     g_u32TimePeriod = ((g_u32frequencyTim3 * TIME_BLINKING_LED_MS) /
- 80002d6:	4b5f      	ldr	r3, [pc, #380]	; (8000454 <main+0x238>)
+ 80002d6:	4b49      	ldr	r3, [pc, #292]	; (80003fc <main+0x1e0>)
  80002d8:	601a      	str	r2, [r3, #0]
     __HAL_TIM_SET_AUTORELOAD(&htim3, g_u32TimePeriod);
- 80002da:	4b5a      	ldr	r3, [pc, #360]	; (8000444 <main+0x228>)
+ 80002da:	4b44      	ldr	r3, [pc, #272]	; (80003ec <main+0x1d0>)
  80002dc:	681b      	ldr	r3, [r3, #0]
- 80002de:	4a5d      	ldr	r2, [pc, #372]	; (8000454 <main+0x238>)
+ 80002de:	4a47      	ldr	r2, [pc, #284]	; (80003fc <main+0x1e0>)
  80002e0:	6812      	ldr	r2, [r2, #0]
  80002e2:	62da      	str	r2, [r3, #44]	; 0x2c
- 80002e4:	4b5b      	ldr	r3, [pc, #364]	; (8000454 <main+0x238>)
+ 80002e4:	4b45      	ldr	r3, [pc, #276]	; (80003fc <main+0x1e0>)
  80002e6:	681a      	ldr	r2, [r3, #0]
- 80002e8:	4b56      	ldr	r3, [pc, #344]	; (8000444 <main+0x228>)
+ 80002e8:	4b40      	ldr	r3, [pc, #256]	; (80003ec <main+0x1d0>)
  80002ea:	60da      	str	r2, [r3, #12]
     /* USER CODE BEGIN 3 */
 
@@ -385,17 +385,17 @@ int main(void)
     		/*хочу чтобы 01111111 прошёл поочерёдно по 8 линиям и
     		 	 	 * результат записался в двумерный массив*/
         if (g_u8NeedToRingLine) {
- 80002ec:	4b5a      	ldr	r3, [pc, #360]	; (8000458 <main+0x23c>)
+ 80002ec:	4b44      	ldr	r3, [pc, #272]	; (8000400 <main+0x1e4>)
  80002ee:	781b      	ldrb	r3, [r3, #0]
  80002f0:	2b00      	cmp	r3, #0
  80002f2:	d100      	bne.n	80002f6 <main+0xda>
- 80002f4:	e0b5      	b.n	8000462 <main+0x246>
+ 80002f4:	e0af      	b.n	8000456 <main+0x23a>
 
             clearCallSR();
  80002f6:	f000 fc81 	bl	8000bfc <clearCallSR>
 
         	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
- 80002fa:	4b51      	ldr	r3, [pc, #324]	; (8000440 <main+0x224>)
+ 80002fa:	4b3b      	ldr	r3, [pc, #236]	; (80003e8 <main+0x1cc>)
  80002fc:	2201      	movs	r2, #1
  80002fe:	2180      	movs	r1, #128	; 0x80
  8000300:	0018      	movs	r0, r3
@@ -408,14 +408,14 @@ int main(void)
  800030a:	701a      	strb	r2, [r3, #0]
  800030c:	e010      	b.n	8000330 <main+0x114>
             	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 800030e:	4b4c      	ldr	r3, [pc, #304]	; (8000440 <main+0x224>)
+ 800030e:	4b36      	ldr	r3, [pc, #216]	; (80003e8 <main+0x1cc>)
  8000310:	2201      	movs	r2, #1
  8000312:	2140      	movs	r1, #64	; 0x40
  8000314:	0018      	movs	r0, r3
  8000316:	f001 f860 	bl	80013da <HAL_GPIO_WritePin>
             			GPIO_PIN_SET);
             	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 800031a:	4b49      	ldr	r3, [pc, #292]	; (8000440 <main+0x224>)
+ 800031a:	4b33      	ldr	r3, [pc, #204]	; (80003e8 <main+0x1cc>)
  800031c:	2200      	movs	r2, #0
  800031e:	2140      	movs	r1, #64	; 0x40
  8000320:	0018      	movs	r0, r3
@@ -434,21 +434,21 @@ int main(void)
             }
 
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
- 8000338:	4b41      	ldr	r3, [pc, #260]	; (8000440 <main+0x224>)
+ 8000338:	4b2b      	ldr	r3, [pc, #172]	; (80003e8 <main+0x1cc>)
  800033a:	2200      	movs	r2, #0
  800033c:	2180      	movs	r1, #128	; 0x80
  800033e:	0018      	movs	r0, r3
  8000340:	f001 f84b 	bl	80013da <HAL_GPIO_WritePin>
 	                GPIO_PIN_RESET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 8000344:	4b3e      	ldr	r3, [pc, #248]	; (8000440 <main+0x224>)
+ 8000344:	4b28      	ldr	r3, [pc, #160]	; (80003e8 <main+0x1cc>)
  8000346:	2201      	movs	r2, #1
  8000348:	2140      	movs	r1, #64	; 0x40
  800034a:	0018      	movs	r0, r3
  800034c:	f001 f845 	bl	80013da <HAL_GPIO_WritePin>
 	        		GPIO_PIN_SET);
 	        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
- 8000350:	4b3b      	ldr	r3, [pc, #236]	; (8000440 <main+0x224>)
+ 8000350:	4b25      	ldr	r3, [pc, #148]	; (80003e8 <main+0x1cc>)
  8000352:	2200      	movs	r2, #0
  8000354:	2140      	movs	r1, #64	; 0x40
  8000356:	0018      	movs	r0, r3
@@ -456,7 +456,7 @@ int main(void)
 	        		GPIO_PIN_RESET);
 
         	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
- 800035c:	4b38      	ldr	r3, [pc, #224]	; (8000440 <main+0x224>)
+ 800035c:	4b22      	ldr	r3, [pc, #136]	; (80003e8 <main+0x1cc>)
  800035e:	2201      	movs	r2, #1
  8000360:	2180      	movs	r1, #128	; 0x80
  8000362:	0018      	movs	r0, r3
@@ -468,7 +468,7 @@ int main(void)
  8000368:	1dbb      	adds	r3, r7, #6
  800036a:	2200      	movs	r2, #0
  800036c:	701a      	strb	r2, [r3, #0]
- 800036e:	e061      	b.n	8000434 <main+0x218>
+ 800036e:	e06e      	b.n	800044e <main+0x232>
 	        		u8CallColumn++) {
 
 	        	HAL_Delay(50);
@@ -498,25 +498,25 @@ int main(void)
  8000396:	1d7b      	adds	r3, r7, #5
  8000398:	2200      	movs	r2, #0
  800039a:	701a      	strb	r2, [r3, #0]
- 800039c:	e031      	b.n	8000402 <main+0x1e6>
+ 800039c:	e042      	b.n	8000424 <main+0x208>
 		        		u8RespString++) {
 
 		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
- 800039e:	4b28      	ldr	r3, [pc, #160]	; (8000440 <main+0x224>)
+ 800039e:	4b12      	ldr	r3, [pc, #72]	; (80003e8 <main+0x1cc>)
  80003a0:	2201      	movs	r2, #1
  80003a2:	2108      	movs	r1, #8
  80003a4:	0018      	movs	r0, r3
  80003a6:	f001 f818 	bl	80013da <HAL_GPIO_WritePin>
 		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 			        HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
- 80003aa:	4b25      	ldr	r3, [pc, #148]	; (8000440 <main+0x224>)
+ 80003aa:	4b0f      	ldr	r3, [pc, #60]	; (80003e8 <main+0x1cc>)
  80003ac:	2200      	movs	r2, #0
  80003ae:	2108      	movs	r1, #8
  80003b0:	0018      	movs	r0, r3
  80003b2:	f001 f812 	bl	80013da <HAL_GPIO_WritePin>
 			        		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
 		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
- 80003b6:	4b22      	ldr	r3, [pc, #136]	; (8000440 <main+0x224>)
+ 80003b6:	4b0c      	ldr	r3, [pc, #48]	; (80003e8 <main+0x1cc>)
  80003b8:	2201      	movs	r2, #1
  80003ba:	2108      	movs	r1, #8
  80003bc:	0018      	movs	r0, r3
@@ -524,713 +524,707 @@ int main(void)
 		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
 
 			        if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
- 80003c2:	4b1f      	ldr	r3, [pc, #124]	; (8000440 <main+0x224>)
+ 80003c2:	4b09      	ldr	r3, [pc, #36]	; (80003e8 <main+0x1cc>)
  80003c4:	2110      	movs	r1, #16
  80003c6:	0018      	movs	r0, r3
  80003c8:	f000 ffea 	bl	80013a0 <HAL_GPIO_ReadPin>
  80003cc:	0003      	movs	r3, r0
  80003ce:	2b01      	cmp	r3, #1
- 80003d0:	d109      	bne.n	80003e6 <main+0x1ca>
+ 80003d0:	d11a      	bne.n	8000408 <main+0x1ec>
 			        		LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
 				        g_au8ResponsesData[u8CallColumn][u8RespString] = 1;
  80003d2:	1dbb      	adds	r3, r7, #6
  80003d4:	781a      	ldrb	r2, [r3, #0]
  80003d6:	1d7b      	adds	r3, r7, #5
  80003d8:	781b      	ldrb	r3, [r3, #0]
- 80003da:	4920      	ldr	r1, [pc, #128]	; (800045c <main+0x240>)
+ 80003da:	490a      	ldr	r1, [pc, #40]	; (8000404 <main+0x1e8>)
  80003dc:	00d2      	lsls	r2, r2, #3
  80003de:	188a      	adds	r2, r1, r2
  80003e0:	2101      	movs	r1, #1
  80003e2:	54d1      	strb	r1, [r2, r3]
- 80003e4:	e008      	b.n	80003f8 <main+0x1dc>
+ 80003e4:	e019      	b.n	800041a <main+0x1fe>
+ 80003e6:	46c0      	nop			; (mov r8, r8)
+ 80003e8:	48000400 	.word	0x48000400
+ 80003ec:	2000004c 	.word	0x2000004c
+ 80003f0:	20000094 	.word	0x20000094
+ 80003f4:	200000f0 	.word	0x200000f0
+ 80003f8:	200000ec 	.word	0x200000ec
+ 80003fc:	200000f4 	.word	0x200000f4
+ 8000400:	20000003 	.word	0x20000003
+ 8000404:	200000f8 	.word	0x200000f8
 			        }
 			        else {
 				        g_au8ResponsesData[u8CallColumn][u8RespString] = 0;
- 80003e6:	1dbb      	adds	r3, r7, #6
- 80003e8:	781a      	ldrb	r2, [r3, #0]
- 80003ea:	1d7b      	adds	r3, r7, #5
- 80003ec:	781b      	ldrb	r3, [r3, #0]
- 80003ee:	491b      	ldr	r1, [pc, #108]	; (800045c <main+0x240>)
- 80003f0:	00d2      	lsls	r2, r2, #3
- 80003f2:	188a      	adds	r2, r1, r2
- 80003f4:	2100      	movs	r1, #0
- 80003f6:	54d1      	strb	r1, [r2, r3]
+ 8000408:	1dbb      	adds	r3, r7, #6
+ 800040a:	781a      	ldrb	r2, [r3, #0]
+ 800040c:	1d7b      	adds	r3, r7, #5
+ 800040e:	781b      	ldrb	r3, [r3, #0]
+ 8000410:	49dd      	ldr	r1, [pc, #884]	; (8000788 <main+0x56c>)
+ 8000412:	00d2      	lsls	r2, r2, #3
+ 8000414:	188a      	adds	r2, r1, r2
+ 8000416:	2100      	movs	r1, #0
+ 8000418:	54d1      	strb	r1, [r2, r3]
 		        		u8RespString++) {
- 80003f8:	1d7b      	adds	r3, r7, #5
- 80003fa:	781a      	ldrb	r2, [r3, #0]
- 80003fc:	1d7b      	adds	r3, r7, #5
- 80003fe:	3201      	adds	r2, #1
- 8000400:	701a      	strb	r2, [r3, #0]
+ 800041a:	1d7b      	adds	r3, r7, #5
+ 800041c:	781a      	ldrb	r2, [r3, #0]
+ 800041e:	1d7b      	adds	r3, r7, #5
+ 8000420:	3201      	adds	r2, #1
+ 8000422:	701a      	strb	r2, [r3, #0]
 		        for (uint8_t u8RespString = 0; u8RespString < NUMBER_OF_LINES;
- 8000402:	1d7b      	adds	r3, r7, #5
- 8000404:	781b      	ldrb	r3, [r3, #0]
- 8000406:	2b07      	cmp	r3, #7
- 8000408:	d9c9      	bls.n	800039e <main+0x182>
-			        }
-
+ 8000424:	1d7b      	adds	r3, r7, #5
+ 8000426:	781b      	ldrb	r3, [r3, #0]
+ 8000428:	2b07      	cmp	r3, #7
+ 800042a:	d9b8      	bls.n	800039e <main+0x182>
 		        }
 		        // мб иф колколумн = 7 то брейк чтобы было 8 клоков а не 9
-		        if(u8CallColumn == 7) {
- 800040a:	1dbb      	adds	r3, r7, #6
- 800040c:	781b      	ldrb	r3, [r3, #0]
- 800040e:	2b07      	cmp	r3, #7
- 8000410:	d026      	beq.n	8000460 <main+0x244>
-		        	break;
-		        }
+//		        if(u8CallColumn == 7) {
+//		        	break;
+//		        }
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
- 8000412:	4b0b      	ldr	r3, [pc, #44]	; (8000440 <main+0x224>)
- 8000414:	2201      	movs	r2, #1
- 8000416:	2140      	movs	r1, #64	; 0x40
- 8000418:	0018      	movs	r0, r3
- 800041a:	f000 ffde 	bl	80013da <HAL_GPIO_WritePin>
+ 800042c:	4bd7      	ldr	r3, [pc, #860]	; (800078c <main+0x570>)
+ 800042e:	2201      	movs	r2, #1
+ 8000430:	2140      	movs	r1, #64	; 0x40
+ 8000432:	0018      	movs	r0, r3
+ 8000434:	f000 ffd1 	bl	80013da <HAL_GPIO_WritePin>
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
- 800041e:	4b08      	ldr	r3, [pc, #32]	; (8000440 <main+0x224>)
- 8000420:	2200      	movs	r2, #0
- 8000422:	2140      	movs	r1, #64	; 0x40
- 8000424:	0018      	movs	r0, r3
- 8000426:	f000 ffd8 	bl	80013da <HAL_GPIO_WritePin>
+ 8000438:	4bd4      	ldr	r3, [pc, #848]	; (800078c <main+0x570>)
+ 800043a:	2200      	movs	r2, #0
+ 800043c:	2140      	movs	r1, #64	; 0x40
+ 800043e:	0018      	movs	r0, r3
+ 8000440:	f000 ffcb 	bl	80013da <HAL_GPIO_WritePin>
 	        		u8CallColumn++) {
- 800042a:	1dbb      	adds	r3, r7, #6
- 800042c:	781a      	ldrb	r2, [r3, #0]
- 800042e:	1dbb      	adds	r3, r7, #6
- 8000430:	3201      	adds	r2, #1
- 8000432:	701a      	strb	r2, [r3, #0]
+ 8000444:	1dbb      	adds	r3, r7, #6
+ 8000446:	781a      	ldrb	r2, [r3, #0]
+ 8000448:	1dbb      	adds	r3, r7, #6
+ 800044a:	3201      	adds	r2, #1
+ 800044c:	701a      	strb	r2, [r3, #0]
 	        for (uint8_t u8CallColumn = 0; u8CallColumn < NUMBER_OF_LINES;
- 8000434:	1dbb      	adds	r3, r7, #6
- 8000436:	781b      	ldrb	r3, [r3, #0]
- 8000438:	2b07      	cmp	r3, #7
- 800043a:	d999      	bls.n	8000370 <main+0x154>
- 800043c:	e011      	b.n	8000462 <main+0x246>
- 800043e:	46c0      	nop			; (mov r8, r8)
- 8000440:	48000400 	.word	0x48000400
- 8000444:	2000004c 	.word	0x2000004c
- 8000448:	20000094 	.word	0x20000094
- 800044c:	200000f0 	.word	0x200000f0
- 8000450:	200000ec 	.word	0x200000ec
- 8000454:	200000f4 	.word	0x200000f4
- 8000458:	20000003 	.word	0x20000003
- 800045c:	200000f8 	.word	0x200000f8
-		        	break;
- 8000460:	46c0      	nop			; (mov r8, r8)
+ 800044e:	1dbb      	adds	r3, r7, #6
+ 8000450:	781b      	ldrb	r3, [r3, #0]
+ 8000452:	2b07      	cmp	r3, #7
+ 8000454:	d98c      	bls.n	8000370 <main+0x154>
         /* data processing */
         //хочу чтобы двумерный массив обработался и
         //на основе обработки сгенерировались данные для отображения
         //сформировали что отобразить
 
         if (g_u8StepNumber == 0) {
- 8000462:	4bda      	ldr	r3, [pc, #872]	; (80007cc <main+0x5b0>)
- 8000464:	781b      	ldrb	r3, [r3, #0]
- 8000466:	2b00      	cmp	r3, #0
- 8000468:	d000      	beq.n	800046c <main+0x250>
- 800046a:	e09b      	b.n	80005a4 <main+0x388>
+ 8000456:	4bce      	ldr	r3, [pc, #824]	; (8000790 <main+0x574>)
+ 8000458:	781b      	ldrb	r3, [r3, #0]
+ 800045a:	2b00      	cmp	r3, #0
+ 800045c:	d000      	beq.n	8000460 <main+0x244>
+ 800045e:	e09b      	b.n	8000598 <main+0x37c>
 
             if (g_u8ActiveRowColor == GREEN_COLOR) {
- 800046c:	4bd8      	ldr	r3, [pc, #864]	; (80007d0 <main+0x5b4>)
- 800046e:	781b      	ldrb	r3, [r3, #0]
- 8000470:	2b01      	cmp	r3, #1
- 8000472:	d129      	bne.n	80004c8 <main+0x2ac>
+ 8000460:	4bcc      	ldr	r3, [pc, #816]	; (8000794 <main+0x578>)
+ 8000462:	781b      	ldrb	r3, [r3, #0]
+ 8000464:	2b01      	cmp	r3, #1
+ 8000466:	d129      	bne.n	80004bc <main+0x2a0>
                 if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
- 8000474:	4bd7      	ldr	r3, [pc, #860]	; (80007d4 <main+0x5b8>)
- 8000476:	781b      	ldrb	r3, [r3, #0]
- 8000478:	2b07      	cmp	r3, #7
- 800047a:	d80d      	bhi.n	8000498 <main+0x27c>
+ 8000468:	4bcb      	ldr	r3, [pc, #812]	; (8000798 <main+0x57c>)
+ 800046a:	781b      	ldrb	r3, [r3, #0]
+ 800046c:	2b07      	cmp	r3, #7
+ 800046e:	d80d      	bhi.n	800048c <main+0x270>
 		            g_u8LedCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]);
- 800047c:	4bd6      	ldr	r3, [pc, #856]	; (80007d8 <main+0x5bc>)
- 800047e:	781b      	ldrb	r3, [r3, #0]
- 8000480:	001a      	movs	r2, r3
- 8000482:	4bd6      	ldr	r3, [pc, #856]	; (80007dc <main+0x5c0>)
- 8000484:	5c9b      	ldrb	r3, [r3, r2]
- 8000486:	001a      	movs	r2, r3
- 8000488:	2301      	movs	r3, #1
- 800048a:	4093      	lsls	r3, r2
- 800048c:	b2da      	uxtb	r2, r3
- 800048e:	4bd4      	ldr	r3, [pc, #848]	; (80007e0 <main+0x5c4>)
- 8000490:	701a      	strb	r2, [r3, #0]
+ 8000470:	4bca      	ldr	r3, [pc, #808]	; (800079c <main+0x580>)
+ 8000472:	781b      	ldrb	r3, [r3, #0]
+ 8000474:	001a      	movs	r2, r3
+ 8000476:	4bca      	ldr	r3, [pc, #808]	; (80007a0 <main+0x584>)
+ 8000478:	5c9b      	ldrb	r3, [r3, r2]
+ 800047a:	001a      	movs	r2, r3
+ 800047c:	2301      	movs	r3, #1
+ 800047e:	4093      	lsls	r3, r2
+ 8000480:	b2da      	uxtb	r2, r3
+ 8000482:	4bc8      	ldr	r3, [pc, #800]	; (80007a4 <main+0x588>)
+ 8000484:	701a      	strb	r2, [r3, #0]
                     g_u8LedCallRedData = LED_OFF;
- 8000492:	4bd4      	ldr	r3, [pc, #848]	; (80007e4 <main+0x5c8>)
- 8000494:	2200      	movs	r2, #0
- 8000496:	701a      	strb	r2, [r3, #0]
+ 8000486:	4bc8      	ldr	r3, [pc, #800]	; (80007a8 <main+0x58c>)
+ 8000488:	2200      	movs	r2, #0
+ 800048a:	701a      	strb	r2, [r3, #0]
 		        }
                 if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
- 8000498:	4bce      	ldr	r3, [pc, #824]	; (80007d4 <main+0x5b8>)
- 800049a:	781b      	ldrb	r3, [r3, #0]
- 800049c:	2b07      	cmp	r3, #7
- 800049e:	d913      	bls.n	80004c8 <main+0x2ac>
+ 800048c:	4bc2      	ldr	r3, [pc, #776]	; (8000798 <main+0x57c>)
+ 800048e:	781b      	ldrb	r3, [r3, #0]
+ 8000490:	2b07      	cmp	r3, #7
+ 8000492:	d913      	bls.n	80004bc <main+0x2a0>
                 		(g_u8ActiveLed < NUMBER_OF_LEDS)) {
- 80004a0:	4bcc      	ldr	r3, [pc, #816]	; (80007d4 <main+0x5b8>)
- 80004a2:	781b      	ldrb	r3, [r3, #0]
+ 8000494:	4bc0      	ldr	r3, [pc, #768]	; (8000798 <main+0x57c>)
+ 8000496:	781b      	ldrb	r3, [r3, #0]
                 if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
- 80004a4:	2b0f      	cmp	r3, #15
- 80004a6:	d80f      	bhi.n	80004c8 <main+0x2ac>
+ 8000498:	2b0f      	cmp	r3, #15
+ 800049a:	d80f      	bhi.n	80004bc <main+0x2a0>
                 	g_u8LedRespGreenData = (LED_ON <<
                 			g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1]);
- 80004a8:	4bcb      	ldr	r3, [pc, #812]	; (80007d8 <main+0x5bc>)
- 80004aa:	781b      	ldrb	r3, [r3, #0]
- 80004ac:	001a      	movs	r2, r3
- 80004ae:	2307      	movs	r3, #7
- 80004b0:	1a9b      	subs	r3, r3, r2
- 80004b2:	4acd      	ldr	r2, [pc, #820]	; (80007e8 <main+0x5cc>)
- 80004b4:	5cd3      	ldrb	r3, [r2, r3]
- 80004b6:	001a      	movs	r2, r3
+ 800049c:	4bbf      	ldr	r3, [pc, #764]	; (800079c <main+0x580>)
+ 800049e:	781b      	ldrb	r3, [r3, #0]
+ 80004a0:	001a      	movs	r2, r3
+ 80004a2:	2307      	movs	r3, #7
+ 80004a4:	1a9b      	subs	r3, r3, r2
+ 80004a6:	4ac1      	ldr	r2, [pc, #772]	; (80007ac <main+0x590>)
+ 80004a8:	5cd3      	ldrb	r3, [r2, r3]
+ 80004aa:	001a      	movs	r2, r3
                 	g_u8LedRespGreenData = (LED_ON <<
- 80004b8:	2301      	movs	r3, #1
- 80004ba:	4093      	lsls	r3, r2
- 80004bc:	b2da      	uxtb	r2, r3
- 80004be:	4bcb      	ldr	r3, [pc, #812]	; (80007ec <main+0x5d0>)
- 80004c0:	701a      	strb	r2, [r3, #0]
+ 80004ac:	2301      	movs	r3, #1
+ 80004ae:	4093      	lsls	r3, r2
+ 80004b0:	b2da      	uxtb	r2, r3
+ 80004b2:	4bbf      	ldr	r3, [pc, #764]	; (80007b0 <main+0x594>)
+ 80004b4:	701a      	strb	r2, [r3, #0]
                 	g_u8LedRespRedData = LED_OFF;
- 80004c2:	4bcb      	ldr	r3, [pc, #812]	; (80007f0 <main+0x5d4>)
- 80004c4:	2200      	movs	r2, #0
- 80004c6:	701a      	strb	r2, [r3, #0]
+ 80004b6:	4bbf      	ldr	r3, [pc, #764]	; (80007b4 <main+0x598>)
+ 80004b8:	2200      	movs	r2, #0
+ 80004ba:	701a      	strb	r2, [r3, #0]
                 }
             }
 
             if (g_u8ActiveRowColor == RED_COLOR) {
- 80004c8:	4bc1      	ldr	r3, [pc, #772]	; (80007d0 <main+0x5b4>)
- 80004ca:	781b      	ldrb	r3, [r3, #0]
- 80004cc:	2b02      	cmp	r3, #2
- 80004ce:	d129      	bne.n	8000524 <main+0x308>
+ 80004bc:	4bb5      	ldr	r3, [pc, #724]	; (8000794 <main+0x578>)
+ 80004be:	781b      	ldrb	r3, [r3, #0]
+ 80004c0:	2b02      	cmp	r3, #2
+ 80004c2:	d129      	bne.n	8000518 <main+0x2fc>
             	if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
- 80004d0:	4bc0      	ldr	r3, [pc, #768]	; (80007d4 <main+0x5b8>)
- 80004d2:	781b      	ldrb	r3, [r3, #0]
- 80004d4:	2b07      	cmp	r3, #7
- 80004d6:	d80d      	bhi.n	80004f4 <main+0x2d8>
+ 80004c4:	4bb4      	ldr	r3, [pc, #720]	; (8000798 <main+0x57c>)
+ 80004c6:	781b      	ldrb	r3, [r3, #0]
+ 80004c8:	2b07      	cmp	r3, #7
+ 80004ca:	d80d      	bhi.n	80004e8 <main+0x2cc>
             		g_u8LedCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
- 80004d8:	4bbf      	ldr	r3, [pc, #764]	; (80007d8 <main+0x5bc>)
- 80004da:	781b      	ldrb	r3, [r3, #0]
- 80004dc:	001a      	movs	r2, r3
- 80004de:	4bc5      	ldr	r3, [pc, #788]	; (80007f4 <main+0x5d8>)
- 80004e0:	5c9b      	ldrb	r3, [r3, r2]
- 80004e2:	001a      	movs	r2, r3
- 80004e4:	2301      	movs	r3, #1
- 80004e6:	4093      	lsls	r3, r2
- 80004e8:	b2da      	uxtb	r2, r3
- 80004ea:	4bbe      	ldr	r3, [pc, #760]	; (80007e4 <main+0x5c8>)
- 80004ec:	701a      	strb	r2, [r3, #0]
+ 80004cc:	4bb3      	ldr	r3, [pc, #716]	; (800079c <main+0x580>)
+ 80004ce:	781b      	ldrb	r3, [r3, #0]
+ 80004d0:	001a      	movs	r2, r3
+ 80004d2:	4bb9      	ldr	r3, [pc, #740]	; (80007b8 <main+0x59c>)
+ 80004d4:	5c9b      	ldrb	r3, [r3, r2]
+ 80004d6:	001a      	movs	r2, r3
+ 80004d8:	2301      	movs	r3, #1
+ 80004da:	4093      	lsls	r3, r2
+ 80004dc:	b2da      	uxtb	r2, r3
+ 80004de:	4bb2      	ldr	r3, [pc, #712]	; (80007a8 <main+0x58c>)
+ 80004e0:	701a      	strb	r2, [r3, #0]
             		g_u8LedCallGreenData = LED_OFF;
- 80004ee:	4bbc      	ldr	r3, [pc, #752]	; (80007e0 <main+0x5c4>)
- 80004f0:	2200      	movs	r2, #0
- 80004f2:	701a      	strb	r2, [r3, #0]
+ 80004e2:	4bb0      	ldr	r3, [pc, #704]	; (80007a4 <main+0x588>)
+ 80004e4:	2200      	movs	r2, #0
+ 80004e6:	701a      	strb	r2, [r3, #0]
             	}
             	if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
- 80004f4:	4bb7      	ldr	r3, [pc, #732]	; (80007d4 <main+0x5b8>)
- 80004f6:	781b      	ldrb	r3, [r3, #0]
- 80004f8:	2b07      	cmp	r3, #7
- 80004fa:	d913      	bls.n	8000524 <main+0x308>
+ 80004e8:	4bab      	ldr	r3, [pc, #684]	; (8000798 <main+0x57c>)
+ 80004ea:	781b      	ldrb	r3, [r3, #0]
+ 80004ec:	2b07      	cmp	r3, #7
+ 80004ee:	d913      	bls.n	8000518 <main+0x2fc>
             			(g_u8ActiveLed < NUMBER_OF_LEDS)) {
- 80004fc:	4bb5      	ldr	r3, [pc, #724]	; (80007d4 <main+0x5b8>)
- 80004fe:	781b      	ldrb	r3, [r3, #0]
+ 80004f0:	4ba9      	ldr	r3, [pc, #676]	; (8000798 <main+0x57c>)
+ 80004f2:	781b      	ldrb	r3, [r3, #0]
             	if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
- 8000500:	2b0f      	cmp	r3, #15
- 8000502:	d80f      	bhi.n	8000524 <main+0x308>
+ 80004f4:	2b0f      	cmp	r3, #15
+ 80004f6:	d80f      	bhi.n	8000518 <main+0x2fc>
             		g_u8LedRespRedData = LED_ON <<
             				g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
- 8000504:	4bb4      	ldr	r3, [pc, #720]	; (80007d8 <main+0x5bc>)
- 8000506:	781b      	ldrb	r3, [r3, #0]
- 8000508:	001a      	movs	r2, r3
- 800050a:	2307      	movs	r3, #7
- 800050c:	1a9b      	subs	r3, r3, r2
- 800050e:	4aba      	ldr	r2, [pc, #744]	; (80007f8 <main+0x5dc>)
- 8000510:	5cd3      	ldrb	r3, [r2, r3]
- 8000512:	001a      	movs	r2, r3
+ 80004f8:	4ba8      	ldr	r3, [pc, #672]	; (800079c <main+0x580>)
+ 80004fa:	781b      	ldrb	r3, [r3, #0]
+ 80004fc:	001a      	movs	r2, r3
+ 80004fe:	2307      	movs	r3, #7
+ 8000500:	1a9b      	subs	r3, r3, r2
+ 8000502:	4aae      	ldr	r2, [pc, #696]	; (80007bc <main+0x5a0>)
+ 8000504:	5cd3      	ldrb	r3, [r2, r3]
+ 8000506:	001a      	movs	r2, r3
             		g_u8LedRespRedData = LED_ON <<
- 8000514:	2301      	movs	r3, #1
- 8000516:	4093      	lsls	r3, r2
- 8000518:	b2da      	uxtb	r2, r3
- 800051a:	4bb5      	ldr	r3, [pc, #724]	; (80007f0 <main+0x5d4>)
- 800051c:	701a      	strb	r2, [r3, #0]
+ 8000508:	2301      	movs	r3, #1
+ 800050a:	4093      	lsls	r3, r2
+ 800050c:	b2da      	uxtb	r2, r3
+ 800050e:	4ba9      	ldr	r3, [pc, #676]	; (80007b4 <main+0x598>)
+ 8000510:	701a      	strb	r2, [r3, #0]
             		g_u8LedRespGreenData = LED_OFF;
- 800051e:	4bb3      	ldr	r3, [pc, #716]	; (80007ec <main+0x5d0>)
- 8000520:	2200      	movs	r2, #0
- 8000522:	701a      	strb	r2, [r3, #0]
+ 8000512:	4ba7      	ldr	r3, [pc, #668]	; (80007b0 <main+0x594>)
+ 8000514:	2200      	movs	r2, #0
+ 8000516:	701a      	strb	r2, [r3, #0]
             	}
             }
 
             if (g_u8ActiveRowColor == YELLOW_COLOR) {
- 8000524:	4baa      	ldr	r3, [pc, #680]	; (80007d0 <main+0x5b4>)
- 8000526:	781b      	ldrb	r3, [r3, #0]
- 8000528:	2b03      	cmp	r3, #3
- 800052a:	d13b      	bne.n	80005a4 <main+0x388>
+ 8000518:	4b9e      	ldr	r3, [pc, #632]	; (8000794 <main+0x578>)
+ 800051a:	781b      	ldrb	r3, [r3, #0]
+ 800051c:	2b03      	cmp	r3, #3
+ 800051e:	d13b      	bne.n	8000598 <main+0x37c>
             	if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
- 800052c:	4ba9      	ldr	r3, [pc, #676]	; (80007d4 <main+0x5b8>)
- 800052e:	781b      	ldrb	r3, [r3, #0]
- 8000530:	2b07      	cmp	r3, #7
- 8000532:	d815      	bhi.n	8000560 <main+0x344>
+ 8000520:	4b9d      	ldr	r3, [pc, #628]	; (8000798 <main+0x57c>)
+ 8000522:	781b      	ldrb	r3, [r3, #0]
+ 8000524:	2b07      	cmp	r3, #7
+ 8000526:	d815      	bhi.n	8000554 <main+0x338>
             		g_u8LedCallGreenData = LED_ON << g_au8GreenCalls[g_u8ActiveRow];
- 8000534:	4ba8      	ldr	r3, [pc, #672]	; (80007d8 <main+0x5bc>)
- 8000536:	781b      	ldrb	r3, [r3, #0]
- 8000538:	001a      	movs	r2, r3
- 800053a:	4ba8      	ldr	r3, [pc, #672]	; (80007dc <main+0x5c0>)
- 800053c:	5c9b      	ldrb	r3, [r3, r2]
- 800053e:	001a      	movs	r2, r3
- 8000540:	2301      	movs	r3, #1
- 8000542:	4093      	lsls	r3, r2
- 8000544:	b2da      	uxtb	r2, r3
- 8000546:	4ba6      	ldr	r3, [pc, #664]	; (80007e0 <main+0x5c4>)
- 8000548:	701a      	strb	r2, [r3, #0]
+ 8000528:	4b9c      	ldr	r3, [pc, #624]	; (800079c <main+0x580>)
+ 800052a:	781b      	ldrb	r3, [r3, #0]
+ 800052c:	001a      	movs	r2, r3
+ 800052e:	4b9c      	ldr	r3, [pc, #624]	; (80007a0 <main+0x584>)
+ 8000530:	5c9b      	ldrb	r3, [r3, r2]
+ 8000532:	001a      	movs	r2, r3
+ 8000534:	2301      	movs	r3, #1
+ 8000536:	4093      	lsls	r3, r2
+ 8000538:	b2da      	uxtb	r2, r3
+ 800053a:	4b9a      	ldr	r3, [pc, #616]	; (80007a4 <main+0x588>)
+ 800053c:	701a      	strb	r2, [r3, #0]
             		g_u8LedCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
- 800054a:	4ba3      	ldr	r3, [pc, #652]	; (80007d8 <main+0x5bc>)
- 800054c:	781b      	ldrb	r3, [r3, #0]
- 800054e:	001a      	movs	r2, r3
- 8000550:	4ba8      	ldr	r3, [pc, #672]	; (80007f4 <main+0x5d8>)
- 8000552:	5c9b      	ldrb	r3, [r3, r2]
- 8000554:	001a      	movs	r2, r3
- 8000556:	2301      	movs	r3, #1
- 8000558:	4093      	lsls	r3, r2
- 800055a:	b2da      	uxtb	r2, r3
- 800055c:	4ba1      	ldr	r3, [pc, #644]	; (80007e4 <main+0x5c8>)
- 800055e:	701a      	strb	r2, [r3, #0]
+ 800053e:	4b97      	ldr	r3, [pc, #604]	; (800079c <main+0x580>)
+ 8000540:	781b      	ldrb	r3, [r3, #0]
+ 8000542:	001a      	movs	r2, r3
+ 8000544:	4b9c      	ldr	r3, [pc, #624]	; (80007b8 <main+0x59c>)
+ 8000546:	5c9b      	ldrb	r3, [r3, r2]
+ 8000548:	001a      	movs	r2, r3
+ 800054a:	2301      	movs	r3, #1
+ 800054c:	4093      	lsls	r3, r2
+ 800054e:	b2da      	uxtb	r2, r3
+ 8000550:	4b95      	ldr	r3, [pc, #596]	; (80007a8 <main+0x58c>)
+ 8000552:	701a      	strb	r2, [r3, #0]
             	}
             	if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
- 8000560:	4b9c      	ldr	r3, [pc, #624]	; (80007d4 <main+0x5b8>)
- 8000562:	781b      	ldrb	r3, [r3, #0]
- 8000564:	2b07      	cmp	r3, #7
- 8000566:	d91d      	bls.n	80005a4 <main+0x388>
+ 8000554:	4b90      	ldr	r3, [pc, #576]	; (8000798 <main+0x57c>)
+ 8000556:	781b      	ldrb	r3, [r3, #0]
+ 8000558:	2b07      	cmp	r3, #7
+ 800055a:	d91d      	bls.n	8000598 <main+0x37c>
             			(g_u8ActiveLed < NUMBER_OF_LEDS)) {
- 8000568:	4b9a      	ldr	r3, [pc, #616]	; (80007d4 <main+0x5b8>)
- 800056a:	781b      	ldrb	r3, [r3, #0]
+ 800055c:	4b8e      	ldr	r3, [pc, #568]	; (8000798 <main+0x57c>)
+ 800055e:	781b      	ldrb	r3, [r3, #0]
             	if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) &&
- 800056c:	2b0f      	cmp	r3, #15
- 800056e:	d819      	bhi.n	80005a4 <main+0x388>
+ 8000560:	2b0f      	cmp	r3, #15
+ 8000562:	d819      	bhi.n	8000598 <main+0x37c>
             		g_u8LedRespGreenData = LED_ON <<
             				g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
- 8000570:	4b99      	ldr	r3, [pc, #612]	; (80007d8 <main+0x5bc>)
- 8000572:	781b      	ldrb	r3, [r3, #0]
- 8000574:	001a      	movs	r2, r3
- 8000576:	2307      	movs	r3, #7
- 8000578:	1a9b      	subs	r3, r3, r2
- 800057a:	4a9b      	ldr	r2, [pc, #620]	; (80007e8 <main+0x5cc>)
- 800057c:	5cd3      	ldrb	r3, [r2, r3]
- 800057e:	001a      	movs	r2, r3
+ 8000564:	4b8d      	ldr	r3, [pc, #564]	; (800079c <main+0x580>)
+ 8000566:	781b      	ldrb	r3, [r3, #0]
+ 8000568:	001a      	movs	r2, r3
+ 800056a:	2307      	movs	r3, #7
+ 800056c:	1a9b      	subs	r3, r3, r2
+ 800056e:	4a8f      	ldr	r2, [pc, #572]	; (80007ac <main+0x590>)
+ 8000570:	5cd3      	ldrb	r3, [r2, r3]
+ 8000572:	001a      	movs	r2, r3
             		g_u8LedRespGreenData = LED_ON <<
- 8000580:	2301      	movs	r3, #1
- 8000582:	4093      	lsls	r3, r2
- 8000584:	b2da      	uxtb	r2, r3
- 8000586:	4b99      	ldr	r3, [pc, #612]	; (80007ec <main+0x5d0>)
- 8000588:	701a      	strb	r2, [r3, #0]
+ 8000574:	2301      	movs	r3, #1
+ 8000576:	4093      	lsls	r3, r2
+ 8000578:	b2da      	uxtb	r2, r3
+ 800057a:	4b8d      	ldr	r3, [pc, #564]	; (80007b0 <main+0x594>)
+ 800057c:	701a      	strb	r2, [r3, #0]
             		g_u8LedRespRedData = LED_ON <<
             				g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
- 800058a:	4b93      	ldr	r3, [pc, #588]	; (80007d8 <main+0x5bc>)
- 800058c:	781b      	ldrb	r3, [r3, #0]
- 800058e:	001a      	movs	r2, r3
- 8000590:	2307      	movs	r3, #7
- 8000592:	1a9b      	subs	r3, r3, r2
- 8000594:	4a98      	ldr	r2, [pc, #608]	; (80007f8 <main+0x5dc>)
- 8000596:	5cd3      	ldrb	r3, [r2, r3]
- 8000598:	001a      	movs	r2, r3
+ 800057e:	4b87      	ldr	r3, [pc, #540]	; (800079c <main+0x580>)
+ 8000580:	781b      	ldrb	r3, [r3, #0]
+ 8000582:	001a      	movs	r2, r3
+ 8000584:	2307      	movs	r3, #7
+ 8000586:	1a9b      	subs	r3, r3, r2
+ 8000588:	4a8c      	ldr	r2, [pc, #560]	; (80007bc <main+0x5a0>)
+ 800058a:	5cd3      	ldrb	r3, [r2, r3]
+ 800058c:	001a      	movs	r2, r3
             		g_u8LedRespRedData = LED_ON <<
- 800059a:	2301      	movs	r3, #1
- 800059c:	4093      	lsls	r3, r2
- 800059e:	b2da      	uxtb	r2, r3
- 80005a0:	4b93      	ldr	r3, [pc, #588]	; (80007f0 <main+0x5d4>)
- 80005a2:	701a      	strb	r2, [r3, #0]
+ 800058e:	2301      	movs	r3, #1
+ 8000590:	4093      	lsls	r3, r2
+ 8000592:	b2da      	uxtb	r2, r3
+ 8000594:	4b87      	ldr	r3, [pc, #540]	; (80007b4 <main+0x598>)
+ 8000596:	701a      	strb	r2, [r3, #0]
             	}
             }
         }
 
         if (g_u8StepNumber != 0) {
- 80005a4:	4b89      	ldr	r3, [pc, #548]	; (80007cc <main+0x5b0>)
- 80005a6:	781b      	ldrb	r3, [r3, #0]
- 80005a8:	2b00      	cmp	r3, #0
- 80005aa:	d05b      	beq.n	8000664 <main+0x448>
+ 8000598:	4b7d      	ldr	r3, [pc, #500]	; (8000790 <main+0x574>)
+ 800059a:	781b      	ldrb	r3, [r3, #0]
+ 800059c:	2b00      	cmp	r3, #0
+ 800059e:	d05b      	beq.n	8000658 <main+0x43c>
         	[NUMBER_OF_LINES - g_u8StepNumber]);*/
 
 	 /* g_u8BinaryRed = g_u8BinaryRed | (SR_DATA_bm << g_au8RedCalls
         	[NUMBER_OF_LINES - g_u8StepNumber]);*/
 
         	if (g_u8ActiveRowColor == GREEN_COLOR) {
- 80005ac:	4b88      	ldr	r3, [pc, #544]	; (80007d0 <main+0x5b4>)
- 80005ae:	781b      	ldrb	r3, [r3, #0]
- 80005b0:	2b01      	cmp	r3, #1
- 80005b2:	d129      	bne.n	8000608 <main+0x3ec>
+ 80005a0:	4b7c      	ldr	r3, [pc, #496]	; (8000794 <main+0x578>)
+ 80005a2:	781b      	ldrb	r3, [r3, #0]
+ 80005a4:	2b01      	cmp	r3, #1
+ 80005a6:	d129      	bne.n	80005fc <main+0x3e0>
 
         		g_u8LedCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]) |
- 80005b4:	4b88      	ldr	r3, [pc, #544]	; (80007d8 <main+0x5bc>)
- 80005b6:	781b      	ldrb	r3, [r3, #0]
- 80005b8:	001a      	movs	r2, r3
- 80005ba:	4b88      	ldr	r3, [pc, #544]	; (80007dc <main+0x5c0>)
- 80005bc:	5c9b      	ldrb	r3, [r3, r2]
- 80005be:	001a      	movs	r2, r3
- 80005c0:	2301      	movs	r3, #1
- 80005c2:	4093      	lsls	r3, r2
- 80005c4:	b25a      	sxtb	r2, r3
- 80005c6:	4b8d      	ldr	r3, [pc, #564]	; (80007fc <main+0x5e0>)
- 80005c8:	781b      	ldrb	r3, [r3, #0]
- 80005ca:	b25b      	sxtb	r3, r3
- 80005cc:	4313      	orrs	r3, r2
- 80005ce:	b25b      	sxtb	r3, r3
- 80005d0:	b2da      	uxtb	r2, r3
- 80005d2:	4b83      	ldr	r3, [pc, #524]	; (80007e0 <main+0x5c4>)
- 80005d4:	701a      	strb	r2, [r3, #0]
+ 80005a8:	4b7c      	ldr	r3, [pc, #496]	; (800079c <main+0x580>)
+ 80005aa:	781b      	ldrb	r3, [r3, #0]
+ 80005ac:	001a      	movs	r2, r3
+ 80005ae:	4b7c      	ldr	r3, [pc, #496]	; (80007a0 <main+0x584>)
+ 80005b0:	5c9b      	ldrb	r3, [r3, r2]
+ 80005b2:	001a      	movs	r2, r3
+ 80005b4:	2301      	movs	r3, #1
+ 80005b6:	4093      	lsls	r3, r2
+ 80005b8:	b25a      	sxtb	r2, r3
+ 80005ba:	4b81      	ldr	r3, [pc, #516]	; (80007c0 <main+0x5a4>)
+ 80005bc:	781b      	ldrb	r3, [r3, #0]
+ 80005be:	b25b      	sxtb	r3, r3
+ 80005c0:	4313      	orrs	r3, r2
+ 80005c2:	b25b      	sxtb	r3, r3
+ 80005c4:	b2da      	uxtb	r2, r3
+ 80005c6:	4b77      	ldr	r3, [pc, #476]	; (80007a4 <main+0x588>)
+ 80005c8:	701a      	strb	r2, [r3, #0]
         				(g_u8ColumnGreen);
         		g_u8LedRespGreenData = (LED_ON << g_au8GreenResponses
         				[NUMBER_OF_LINES - g_u8ActiveRow]) | (g_u8ColumnGreen);
- 80005d6:	4b80      	ldr	r3, [pc, #512]	; (80007d8 <main+0x5bc>)
- 80005d8:	781b      	ldrb	r3, [r3, #0]
- 80005da:	001a      	movs	r2, r3
- 80005dc:	2308      	movs	r3, #8
- 80005de:	1a9b      	subs	r3, r3, r2
- 80005e0:	4a81      	ldr	r2, [pc, #516]	; (80007e8 <main+0x5cc>)
- 80005e2:	5cd3      	ldrb	r3, [r2, r3]
- 80005e4:	001a      	movs	r2, r3
+ 80005ca:	4b74      	ldr	r3, [pc, #464]	; (800079c <main+0x580>)
+ 80005cc:	781b      	ldrb	r3, [r3, #0]
+ 80005ce:	001a      	movs	r2, r3
+ 80005d0:	2308      	movs	r3, #8
+ 80005d2:	1a9b      	subs	r3, r3, r2
+ 80005d4:	4a75      	ldr	r2, [pc, #468]	; (80007ac <main+0x590>)
+ 80005d6:	5cd3      	ldrb	r3, [r2, r3]
+ 80005d8:	001a      	movs	r2, r3
         		g_u8LedRespGreenData = (LED_ON << g_au8GreenResponses
- 80005e6:	2301      	movs	r3, #1
- 80005e8:	4093      	lsls	r3, r2
+ 80005da:	2301      	movs	r3, #1
+ 80005dc:	4093      	lsls	r3, r2
         				[NUMBER_OF_LINES - g_u8ActiveRow]) | (g_u8ColumnGreen);
- 80005ea:	b25a      	sxtb	r2, r3
- 80005ec:	4b83      	ldr	r3, [pc, #524]	; (80007fc <main+0x5e0>)
- 80005ee:	781b      	ldrb	r3, [r3, #0]
- 80005f0:	b25b      	sxtb	r3, r3
- 80005f2:	4313      	orrs	r3, r2
- 80005f4:	b25b      	sxtb	r3, r3
- 80005f6:	b2da      	uxtb	r2, r3
+ 80005de:	b25a      	sxtb	r2, r3
+ 80005e0:	4b77      	ldr	r3, [pc, #476]	; (80007c0 <main+0x5a4>)
+ 80005e2:	781b      	ldrb	r3, [r3, #0]
+ 80005e4:	b25b      	sxtb	r3, r3
+ 80005e6:	4313      	orrs	r3, r2
+ 80005e8:	b25b      	sxtb	r3, r3
+ 80005ea:	b2da      	uxtb	r2, r3
         		g_u8LedRespGreenData = (LED_ON << g_au8GreenResponses
- 80005f8:	4b7c      	ldr	r3, [pc, #496]	; (80007ec <main+0x5d0>)
- 80005fa:	701a      	strb	r2, [r3, #0]
+ 80005ec:	4b70      	ldr	r3, [pc, #448]	; (80007b0 <main+0x594>)
+ 80005ee:	701a      	strb	r2, [r3, #0]
 			  	g_u8LedCallRedData = LED_OFF /*| (g_u8BinaryRed)*/;
- 80005fc:	4b79      	ldr	r3, [pc, #484]	; (80007e4 <main+0x5c8>)
- 80005fe:	2200      	movs	r2, #0
- 8000600:	701a      	strb	r2, [r3, #0]
+ 80005f0:	4b6d      	ldr	r3, [pc, #436]	; (80007a8 <main+0x58c>)
+ 80005f2:	2200      	movs	r2, #0
+ 80005f4:	701a      	strb	r2, [r3, #0]
 			  	g_u8LedRespRedData = LED_OFF /*| (g_u8BinaryRed)*/;
- 8000602:	4b7b      	ldr	r3, [pc, #492]	; (80007f0 <main+0x5d4>)
- 8000604:	2200      	movs	r2, #0
- 8000606:	701a      	strb	r2, [r3, #0]
+ 80005f6:	4b6f      	ldr	r3, [pc, #444]	; (80007b4 <main+0x598>)
+ 80005f8:	2200      	movs	r2, #0
+ 80005fa:	701a      	strb	r2, [r3, #0]
         	}
         	if (g_u8ActiveRowColor == RED_COLOR) {
- 8000608:	4b71      	ldr	r3, [pc, #452]	; (80007d0 <main+0x5b4>)
- 800060a:	781b      	ldrb	r3, [r3, #0]
- 800060c:	2b02      	cmp	r3, #2
- 800060e:	d129      	bne.n	8000664 <main+0x448>
+ 80005fc:	4b65      	ldr	r3, [pc, #404]	; (8000794 <main+0x578>)
+ 80005fe:	781b      	ldrb	r3, [r3, #0]
+ 8000600:	2b02      	cmp	r3, #2
+ 8000602:	d129      	bne.n	8000658 <main+0x43c>
 
         		g_u8LedCallRedData = (LED_ON << g_au8RedCalls[g_u8ActiveRow]) |
- 8000610:	4b71      	ldr	r3, [pc, #452]	; (80007d8 <main+0x5bc>)
- 8000612:	781b      	ldrb	r3, [r3, #0]
- 8000614:	001a      	movs	r2, r3
- 8000616:	4b77      	ldr	r3, [pc, #476]	; (80007f4 <main+0x5d8>)
- 8000618:	5c9b      	ldrb	r3, [r3, r2]
- 800061a:	001a      	movs	r2, r3
- 800061c:	2301      	movs	r3, #1
- 800061e:	4093      	lsls	r3, r2
- 8000620:	b25a      	sxtb	r2, r3
- 8000622:	4b77      	ldr	r3, [pc, #476]	; (8000800 <main+0x5e4>)
- 8000624:	781b      	ldrb	r3, [r3, #0]
- 8000626:	b25b      	sxtb	r3, r3
- 8000628:	4313      	orrs	r3, r2
- 800062a:	b25b      	sxtb	r3, r3
- 800062c:	b2da      	uxtb	r2, r3
- 800062e:	4b6d      	ldr	r3, [pc, #436]	; (80007e4 <main+0x5c8>)
- 8000630:	701a      	strb	r2, [r3, #0]
+ 8000604:	4b65      	ldr	r3, [pc, #404]	; (800079c <main+0x580>)
+ 8000606:	781b      	ldrb	r3, [r3, #0]
+ 8000608:	001a      	movs	r2, r3
+ 800060a:	4b6b      	ldr	r3, [pc, #428]	; (80007b8 <main+0x59c>)
+ 800060c:	5c9b      	ldrb	r3, [r3, r2]
+ 800060e:	001a      	movs	r2, r3
+ 8000610:	2301      	movs	r3, #1
+ 8000612:	4093      	lsls	r3, r2
+ 8000614:	b25a      	sxtb	r2, r3
+ 8000616:	4b6b      	ldr	r3, [pc, #428]	; (80007c4 <main+0x5a8>)
+ 8000618:	781b      	ldrb	r3, [r3, #0]
+ 800061a:	b25b      	sxtb	r3, r3
+ 800061c:	4313      	orrs	r3, r2
+ 800061e:	b25b      	sxtb	r3, r3
+ 8000620:	b2da      	uxtb	r2, r3
+ 8000622:	4b61      	ldr	r3, [pc, #388]	; (80007a8 <main+0x58c>)
+ 8000624:	701a      	strb	r2, [r3, #0]
         				(g_u8ColumnRed);
         		g_u8LedRespRedData = (LED_ON << g_au8RedResponses
         				[NUMBER_OF_LINES - g_u8ActiveRow]) | (g_u8ColumnRed);
- 8000632:	4b69      	ldr	r3, [pc, #420]	; (80007d8 <main+0x5bc>)
- 8000634:	781b      	ldrb	r3, [r3, #0]
- 8000636:	001a      	movs	r2, r3
- 8000638:	2308      	movs	r3, #8
- 800063a:	1a9b      	subs	r3, r3, r2
- 800063c:	4a6e      	ldr	r2, [pc, #440]	; (80007f8 <main+0x5dc>)
- 800063e:	5cd3      	ldrb	r3, [r2, r3]
- 8000640:	001a      	movs	r2, r3
+ 8000626:	4b5d      	ldr	r3, [pc, #372]	; (800079c <main+0x580>)
+ 8000628:	781b      	ldrb	r3, [r3, #0]
+ 800062a:	001a      	movs	r2, r3
+ 800062c:	2308      	movs	r3, #8
+ 800062e:	1a9b      	subs	r3, r3, r2
+ 8000630:	4a62      	ldr	r2, [pc, #392]	; (80007bc <main+0x5a0>)
+ 8000632:	5cd3      	ldrb	r3, [r2, r3]
+ 8000634:	001a      	movs	r2, r3
         		g_u8LedRespRedData = (LED_ON << g_au8RedResponses
- 8000642:	2301      	movs	r3, #1
- 8000644:	4093      	lsls	r3, r2
+ 8000636:	2301      	movs	r3, #1
+ 8000638:	4093      	lsls	r3, r2
         				[NUMBER_OF_LINES - g_u8ActiveRow]) | (g_u8ColumnRed);
- 8000646:	b25a      	sxtb	r2, r3
- 8000648:	4b6d      	ldr	r3, [pc, #436]	; (8000800 <main+0x5e4>)
- 800064a:	781b      	ldrb	r3, [r3, #0]
- 800064c:	b25b      	sxtb	r3, r3
- 800064e:	4313      	orrs	r3, r2
- 8000650:	b25b      	sxtb	r3, r3
- 8000652:	b2da      	uxtb	r2, r3
+ 800063a:	b25a      	sxtb	r2, r3
+ 800063c:	4b61      	ldr	r3, [pc, #388]	; (80007c4 <main+0x5a8>)
+ 800063e:	781b      	ldrb	r3, [r3, #0]
+ 8000640:	b25b      	sxtb	r3, r3
+ 8000642:	4313      	orrs	r3, r2
+ 8000644:	b25b      	sxtb	r3, r3
+ 8000646:	b2da      	uxtb	r2, r3
         		g_u8LedRespRedData = (LED_ON << g_au8RedResponses
- 8000654:	4b66      	ldr	r3, [pc, #408]	; (80007f0 <main+0x5d4>)
- 8000656:	701a      	strb	r2, [r3, #0]
+ 8000648:	4b5a      	ldr	r3, [pc, #360]	; (80007b4 <main+0x598>)
+ 800064a:	701a      	strb	r2, [r3, #0]
         		g_u8LedCallGreenData = LED_OFF /*| (g_u8BinaryGreen)*/;
- 8000658:	4b61      	ldr	r3, [pc, #388]	; (80007e0 <main+0x5c4>)
- 800065a:	2200      	movs	r2, #0
- 800065c:	701a      	strb	r2, [r3, #0]
+ 800064c:	4b55      	ldr	r3, [pc, #340]	; (80007a4 <main+0x588>)
+ 800064e:	2200      	movs	r2, #0
+ 8000650:	701a      	strb	r2, [r3, #0]
         		g_u8LedRespGreenData = LED_OFF /*| (g_u8BinaryGreen)*/;
- 800065e:	4b63      	ldr	r3, [pc, #396]	; (80007ec <main+0x5d0>)
- 8000660:	2200      	movs	r2, #0
- 8000662:	701a      	strb	r2, [r3, #0]
+ 8000652:	4b57      	ldr	r3, [pc, #348]	; (80007b0 <main+0x594>)
+ 8000654:	2200      	movs	r2, #0
+ 8000656:	701a      	strb	r2, [r3, #0]
         }
 
 
         //отобразили
 
         if (g_u8NeedToDisplayLedData) {
- 8000664:	4b67      	ldr	r3, [pc, #412]	; (8000804 <main+0x5e8>)
- 8000666:	781b      	ldrb	r3, [r3, #0]
- 8000668:	2b00      	cmp	r3, #0
- 800066a:	d03a      	beq.n	80006e2 <main+0x4c6>
+ 8000658:	4b5b      	ldr	r3, [pc, #364]	; (80007c8 <main+0x5ac>)
+ 800065a:	781b      	ldrb	r3, [r3, #0]
+ 800065c:	2b00      	cmp	r3, #0
+ 800065e:	d03a      	beq.n	80006d6 <main+0x4ba>
         	clearLEDSR();
- 800066c:	f000 fa42 	bl	8000af4 <clearLEDSR>
+ 8000660:	f000 fa48 	bl	8000af4 <clearLEDSR>
         	loadLEDSR();
- 8000670:	f000 fa54 	bl	8000b1c <loadLEDSR>
+ 8000664:	f000 fa5a 	bl	8000b1c <loadLEDSR>
 
 
         	if (USE_TIMER) {
         		g_u8NeedToDisplayLedData = 0;
- 8000674:	4b63      	ldr	r3, [pc, #396]	; (8000804 <main+0x5e8>)
- 8000676:	2200      	movs	r2, #0
- 8000678:	701a      	strb	r2, [r3, #0]
+ 8000668:	4b57      	ldr	r3, [pc, #348]	; (80007c8 <main+0x5ac>)
+ 800066a:	2200      	movs	r2, #0
+ 800066c:	701a      	strb	r2, [r3, #0]
         	}
         	g_u8ActiveLed++;
- 800067a:	4b56      	ldr	r3, [pc, #344]	; (80007d4 <main+0x5b8>)
- 800067c:	781b      	ldrb	r3, [r3, #0]
- 800067e:	3301      	adds	r3, #1
- 8000680:	b2da      	uxtb	r2, r3
- 8000682:	4b54      	ldr	r3, [pc, #336]	; (80007d4 <main+0x5b8>)
- 8000684:	701a      	strb	r2, [r3, #0]
+ 800066e:	4b4a      	ldr	r3, [pc, #296]	; (8000798 <main+0x57c>)
+ 8000670:	781b      	ldrb	r3, [r3, #0]
+ 8000672:	3301      	adds	r3, #1
+ 8000674:	b2da      	uxtb	r2, r3
+ 8000676:	4b48      	ldr	r3, [pc, #288]	; (8000798 <main+0x57c>)
+ 8000678:	701a      	strb	r2, [r3, #0]
         	if (g_u8ActiveLed == NUMBER_OF_LEDS) {
- 8000686:	4b53      	ldr	r3, [pc, #332]	; (80007d4 <main+0x5b8>)
- 8000688:	781b      	ldrb	r3, [r3, #0]
- 800068a:	2b10      	cmp	r3, #16
- 800068c:	d10f      	bne.n	80006ae <main+0x492>
+ 800067a:	4b47      	ldr	r3, [pc, #284]	; (8000798 <main+0x57c>)
+ 800067c:	781b      	ldrb	r3, [r3, #0]
+ 800067e:	2b10      	cmp	r3, #16
+ 8000680:	d10f      	bne.n	80006a2 <main+0x486>
         		g_u8ActiveRowColor++;
- 800068e:	4b50      	ldr	r3, [pc, #320]	; (80007d0 <main+0x5b4>)
- 8000690:	781b      	ldrb	r3, [r3, #0]
- 8000692:	3301      	adds	r3, #1
- 8000694:	b2da      	uxtb	r2, r3
- 8000696:	4b4e      	ldr	r3, [pc, #312]	; (80007d0 <main+0x5b4>)
- 8000698:	701a      	strb	r2, [r3, #0]
+ 8000682:	4b44      	ldr	r3, [pc, #272]	; (8000794 <main+0x578>)
+ 8000684:	781b      	ldrb	r3, [r3, #0]
+ 8000686:	3301      	adds	r3, #1
+ 8000688:	b2da      	uxtb	r2, r3
+ 800068a:	4b42      	ldr	r3, [pc, #264]	; (8000794 <main+0x578>)
+ 800068c:	701a      	strb	r2, [r3, #0]
         		g_u8ActiveLed = 0;
- 800069a:	4b4e      	ldr	r3, [pc, #312]	; (80007d4 <main+0x5b8>)
- 800069c:	2200      	movs	r2, #0
- 800069e:	701a      	strb	r2, [r3, #0]
+ 800068e:	4b42      	ldr	r3, [pc, #264]	; (8000798 <main+0x57c>)
+ 8000690:	2200      	movs	r2, #0
+ 8000692:	701a      	strb	r2, [r3, #0]
         		if (g_u8ActiveRowColor == NUMBER_OF_COLORS) {
- 80006a0:	4b4b      	ldr	r3, [pc, #300]	; (80007d0 <main+0x5b4>)
- 80006a2:	781b      	ldrb	r3, [r3, #0]
- 80006a4:	2b04      	cmp	r3, #4
- 80006a6:	d102      	bne.n	80006ae <main+0x492>
+ 8000694:	4b3f      	ldr	r3, [pc, #252]	; (8000794 <main+0x578>)
+ 8000696:	781b      	ldrb	r3, [r3, #0]
+ 8000698:	2b04      	cmp	r3, #4
+ 800069a:	d102      	bne.n	80006a2 <main+0x486>
         			g_u8ActiveRowColor = 1;
- 80006a8:	4b49      	ldr	r3, [pc, #292]	; (80007d0 <main+0x5b4>)
- 80006aa:	2201      	movs	r2, #1
- 80006ac:	701a      	strb	r2, [r3, #0]
+ 800069c:	4b3d      	ldr	r3, [pc, #244]	; (8000794 <main+0x578>)
+ 800069e:	2201      	movs	r2, #1
+ 80006a0:	701a      	strb	r2, [r3, #0]
 
         		}
         	}
 		 // g_u8ActiveRow++;
 
         	if (g_u8ActiveRow/* + g_u8StepNumber */== NUMBER_OF_LINES) {
- 80006ae:	4b4a      	ldr	r3, [pc, #296]	; (80007d8 <main+0x5bc>)
- 80006b0:	781b      	ldrb	r3, [r3, #0]
- 80006b2:	2b08      	cmp	r3, #8
- 80006b4:	d102      	bne.n	80006bc <main+0x4a0>
+ 80006a2:	4b3e      	ldr	r3, [pc, #248]	; (800079c <main+0x580>)
+ 80006a4:	781b      	ldrb	r3, [r3, #0]
+ 80006a6:	2b08      	cmp	r3, #8
+ 80006a8:	d102      	bne.n	80006b0 <main+0x494>
         		g_u8ActiveRow = 0;
- 80006b6:	4b48      	ldr	r3, [pc, #288]	; (80007d8 <main+0x5bc>)
- 80006b8:	2200      	movs	r2, #0
- 80006ba:	701a      	strb	r2, [r3, #0]
+ 80006aa:	4b3c      	ldr	r3, [pc, #240]	; (800079c <main+0x580>)
+ 80006ac:	2200      	movs	r2, #0
+ 80006ae:	701a      	strb	r2, [r3, #0]
 			  //g_u8StepNumber++;
 			}
         	g_u8ActiveRow++;
- 80006bc:	4b46      	ldr	r3, [pc, #280]	; (80007d8 <main+0x5bc>)
- 80006be:	781b      	ldrb	r3, [r3, #0]
- 80006c0:	3301      	adds	r3, #1
- 80006c2:	b2da      	uxtb	r2, r3
- 80006c4:	4b44      	ldr	r3, [pc, #272]	; (80007d8 <main+0x5bc>)
- 80006c6:	701a      	strb	r2, [r3, #0]
+ 80006b0:	4b3a      	ldr	r3, [pc, #232]	; (800079c <main+0x580>)
+ 80006b2:	781b      	ldrb	r3, [r3, #0]
+ 80006b4:	3301      	adds	r3, #1
+ 80006b6:	b2da      	uxtb	r2, r3
+ 80006b8:	4b38      	ldr	r3, [pc, #224]	; (800079c <main+0x580>)
+ 80006ba:	701a      	strb	r2, [r3, #0]
         	if (g_u8StepNumber == NUMBER_OF_LINES) {
- 80006c8:	4b40      	ldr	r3, [pc, #256]	; (80007cc <main+0x5b0>)
- 80006ca:	781b      	ldrb	r3, [r3, #0]
- 80006cc:	2b08      	cmp	r3, #8
- 80006ce:	d108      	bne.n	80006e2 <main+0x4c6>
+ 80006bc:	4b34      	ldr	r3, [pc, #208]	; (8000790 <main+0x574>)
+ 80006be:	781b      	ldrb	r3, [r3, #0]
+ 80006c0:	2b08      	cmp	r3, #8
+ 80006c2:	d108      	bne.n	80006d6 <main+0x4ba>
 				//break;
         		g_u8StepNumber = 0;
- 80006d0:	4b3e      	ldr	r3, [pc, #248]	; (80007cc <main+0x5b0>)
+ 80006c4:	4b32      	ldr	r3, [pc, #200]	; (8000790 <main+0x574>)
+ 80006c6:	2200      	movs	r2, #0
+ 80006c8:	701a      	strb	r2, [r3, #0]
+				g_u8ColumnGreen = 0b00000000;
+ 80006ca:	4b3d      	ldr	r3, [pc, #244]	; (80007c0 <main+0x5a4>)
+ 80006cc:	2200      	movs	r2, #0
+ 80006ce:	701a      	strb	r2, [r3, #0]
+				g_u8ColumnRed = 0b00000000;
+ 80006d0:	4b3c      	ldr	r3, [pc, #240]	; (80007c4 <main+0x5a8>)
  80006d2:	2200      	movs	r2, #0
  80006d4:	701a      	strb	r2, [r3, #0]
-				g_u8ColumnGreen = 0b00000000;
- 80006d6:	4b49      	ldr	r3, [pc, #292]	; (80007fc <main+0x5e0>)
- 80006d8:	2200      	movs	r2, #0
- 80006da:	701a      	strb	r2, [r3, #0]
-				g_u8ColumnRed = 0b00000000;
- 80006dc:	4b48      	ldr	r3, [pc, #288]	; (8000800 <main+0x5e4>)
- 80006de:	2200      	movs	r2, #0
- 80006e0:	701a      	strb	r2, [r3, #0]
 //			    g_u8DisplayAllLinesUnicolor = 1;
 
 
         }
 
         if (g_u8AllLinesUnicolor == GREEN_COLOR) {
- 80006e2:	4b49      	ldr	r3, [pc, #292]	; (8000808 <main+0x5ec>)
- 80006e4:	781b      	ldrb	r3, [r3, #0]
- 80006e6:	2b01      	cmp	r3, #1
- 80006e8:	d10b      	bne.n	8000702 <main+0x4e6>
+ 80006d6:	4b3d      	ldr	r3, [pc, #244]	; (80007cc <main+0x5b0>)
+ 80006d8:	781b      	ldrb	r3, [r3, #0]
+ 80006da:	2b01      	cmp	r3, #1
+ 80006dc:	d10b      	bne.n	80006f6 <main+0x4da>
 
         	g_u8AllLedCallGreenData = LED_ON;
- 80006ea:	4b48      	ldr	r3, [pc, #288]	; (800080c <main+0x5f0>)
- 80006ec:	2201      	movs	r2, #1
- 80006ee:	701a      	strb	r2, [r3, #0]
+ 80006de:	4b3c      	ldr	r3, [pc, #240]	; (80007d0 <main+0x5b4>)
+ 80006e0:	2201      	movs	r2, #1
+ 80006e2:	701a      	strb	r2, [r3, #0]
         	g_u8AllLedRespGreenData = LED_ON;
- 80006f0:	4b47      	ldr	r3, [pc, #284]	; (8000810 <main+0x5f4>)
- 80006f2:	2201      	movs	r2, #1
- 80006f4:	701a      	strb	r2, [r3, #0]
+ 80006e4:	4b3b      	ldr	r3, [pc, #236]	; (80007d4 <main+0x5b8>)
+ 80006e6:	2201      	movs	r2, #1
+ 80006e8:	701a      	strb	r2, [r3, #0]
         	g_u8AllLedCallRedData = LED_OFF;
- 80006f6:	4b47      	ldr	r3, [pc, #284]	; (8000814 <main+0x5f8>)
- 80006f8:	2200      	movs	r2, #0
- 80006fa:	701a      	strb	r2, [r3, #0]
+ 80006ea:	4b3b      	ldr	r3, [pc, #236]	; (80007d8 <main+0x5bc>)
+ 80006ec:	2200      	movs	r2, #0
+ 80006ee:	701a      	strb	r2, [r3, #0]
         	g_u8AllLedRespRedData = LED_OFF;
- 80006fc:	4b46      	ldr	r3, [pc, #280]	; (8000818 <main+0x5fc>)
- 80006fe:	2200      	movs	r2, #0
- 8000700:	701a      	strb	r2, [r3, #0]
+ 80006f0:	4b3a      	ldr	r3, [pc, #232]	; (80007dc <main+0x5c0>)
+ 80006f2:	2200      	movs	r2, #0
+ 80006f4:	701a      	strb	r2, [r3, #0]
         }
 
         if (g_u8AllLinesUnicolor == RED_COLOR) {
- 8000702:	4b41      	ldr	r3, [pc, #260]	; (8000808 <main+0x5ec>)
- 8000704:	781b      	ldrb	r3, [r3, #0]
- 8000706:	2b02      	cmp	r3, #2
- 8000708:	d10b      	bne.n	8000722 <main+0x506>
+ 80006f6:	4b35      	ldr	r3, [pc, #212]	; (80007cc <main+0x5b0>)
+ 80006f8:	781b      	ldrb	r3, [r3, #0]
+ 80006fa:	2b02      	cmp	r3, #2
+ 80006fc:	d10b      	bne.n	8000716 <main+0x4fa>
 
         	g_u8AllLedCallGreenData = LED_OFF;
- 800070a:	4b40      	ldr	r3, [pc, #256]	; (800080c <main+0x5f0>)
- 800070c:	2200      	movs	r2, #0
- 800070e:	701a      	strb	r2, [r3, #0]
+ 80006fe:	4b34      	ldr	r3, [pc, #208]	; (80007d0 <main+0x5b4>)
+ 8000700:	2200      	movs	r2, #0
+ 8000702:	701a      	strb	r2, [r3, #0]
         	g_u8AllLedRespGreenData = LED_OFF;
- 8000710:	4b3f      	ldr	r3, [pc, #252]	; (8000810 <main+0x5f4>)
- 8000712:	2200      	movs	r2, #0
- 8000714:	701a      	strb	r2, [r3, #0]
+ 8000704:	4b33      	ldr	r3, [pc, #204]	; (80007d4 <main+0x5b8>)
+ 8000706:	2200      	movs	r2, #0
+ 8000708:	701a      	strb	r2, [r3, #0]
         	g_u8AllLedCallRedData = LED_ON;
- 8000716:	4b3f      	ldr	r3, [pc, #252]	; (8000814 <main+0x5f8>)
- 8000718:	2201      	movs	r2, #1
- 800071a:	701a      	strb	r2, [r3, #0]
+ 800070a:	4b33      	ldr	r3, [pc, #204]	; (80007d8 <main+0x5bc>)
+ 800070c:	2201      	movs	r2, #1
+ 800070e:	701a      	strb	r2, [r3, #0]
         	g_u8AllLedRespRedData = LED_ON;
- 800071c:	4b3e      	ldr	r3, [pc, #248]	; (8000818 <main+0x5fc>)
- 800071e:	2201      	movs	r2, #1
- 8000720:	701a      	strb	r2, [r3, #0]
+ 8000710:	4b32      	ldr	r3, [pc, #200]	; (80007dc <main+0x5c0>)
+ 8000712:	2201      	movs	r2, #1
+ 8000714:	701a      	strb	r2, [r3, #0]
         }
 
         if (g_u8AllLinesUnicolor == YELLOW_COLOR) {
- 8000722:	4b39      	ldr	r3, [pc, #228]	; (8000808 <main+0x5ec>)
- 8000724:	781b      	ldrb	r3, [r3, #0]
- 8000726:	2b03      	cmp	r3, #3
- 8000728:	d10b      	bne.n	8000742 <main+0x526>
+ 8000716:	4b2d      	ldr	r3, [pc, #180]	; (80007cc <main+0x5b0>)
+ 8000718:	781b      	ldrb	r3, [r3, #0]
+ 800071a:	2b03      	cmp	r3, #3
+ 800071c:	d10b      	bne.n	8000736 <main+0x51a>
 
         	/*так горит жёлтый, в зависимости от того, что OFF будет другой цвет -
         	 	 	 * цикл?? условие7??? чтобы по порядку с прерыванием*/
         	g_u8AllLedCallGreenData = LED_ON;
- 800072a:	4b38      	ldr	r3, [pc, #224]	; (800080c <main+0x5f0>)
+ 800071e:	4b2c      	ldr	r3, [pc, #176]	; (80007d0 <main+0x5b4>)
+ 8000720:	2201      	movs	r2, #1
+ 8000722:	701a      	strb	r2, [r3, #0]
+        	g_u8AllLedRespGreenData = LED_ON;
+ 8000724:	4b2b      	ldr	r3, [pc, #172]	; (80007d4 <main+0x5b8>)
+ 8000726:	2201      	movs	r2, #1
+ 8000728:	701a      	strb	r2, [r3, #0]
+        	g_u8AllLedCallRedData = LED_ON;
+ 800072a:	4b2b      	ldr	r3, [pc, #172]	; (80007d8 <main+0x5bc>)
  800072c:	2201      	movs	r2, #1
  800072e:	701a      	strb	r2, [r3, #0]
-        	g_u8AllLedRespGreenData = LED_ON;
- 8000730:	4b37      	ldr	r3, [pc, #220]	; (8000810 <main+0x5f4>)
+        	g_u8AllLedRespRedData = LED_ON;
+ 8000730:	4b2a      	ldr	r3, [pc, #168]	; (80007dc <main+0x5c0>)
  8000732:	2201      	movs	r2, #1
  8000734:	701a      	strb	r2, [r3, #0]
-        	g_u8AllLedCallRedData = LED_ON;
- 8000736:	4b37      	ldr	r3, [pc, #220]	; (8000814 <main+0x5f8>)
- 8000738:	2201      	movs	r2, #1
- 800073a:	701a      	strb	r2, [r3, #0]
-        	g_u8AllLedRespRedData = LED_ON;
- 800073c:	4b36      	ldr	r3, [pc, #216]	; (8000818 <main+0x5fc>)
- 800073e:	2201      	movs	r2, #1
- 8000740:	701a      	strb	r2, [r3, #0]
         }
 
 
         if (g_u8DisplayAllLinesUnicolor) {
- 8000742:	4b36      	ldr	r3, [pc, #216]	; (800081c <main+0x600>)
- 8000744:	781b      	ldrb	r3, [r3, #0]
- 8000746:	2b00      	cmp	r3, #0
- 8000748:	d100      	bne.n	800074c <main+0x530>
- 800074a:	e5cf      	b.n	80002ec <main+0xd0>
+ 8000736:	4b2a      	ldr	r3, [pc, #168]	; (80007e0 <main+0x5c4>)
+ 8000738:	781b      	ldrb	r3, [r3, #0]
+ 800073a:	2b00      	cmp	r3, #0
+ 800073c:	d100      	bne.n	8000740 <main+0x524>
+ 800073e:	e5d5      	b.n	80002ec <main+0xd0>
 
         	HAL_GPIO_WritePin(LED_CALL_GREEN_SR_DATA_GPIO_Port,
- 800074c:	4b2f      	ldr	r3, [pc, #188]	; (800080c <main+0x5f0>)
- 800074e:	781a      	ldrb	r2, [r3, #0]
- 8000750:	2390      	movs	r3, #144	; 0x90
- 8000752:	05db      	lsls	r3, r3, #23
- 8000754:	2120      	movs	r1, #32
- 8000756:	0018      	movs	r0, r3
- 8000758:	f000 fe3f 	bl	80013da <HAL_GPIO_WritePin>
+ 8000740:	4b23      	ldr	r3, [pc, #140]	; (80007d0 <main+0x5b4>)
+ 8000742:	781a      	ldrb	r2, [r3, #0]
+ 8000744:	2390      	movs	r3, #144	; 0x90
+ 8000746:	05db      	lsls	r3, r3, #23
+ 8000748:	2120      	movs	r1, #32
+ 800074a:	0018      	movs	r0, r3
+ 800074c:	f000 fe45 	bl	80013da <HAL_GPIO_WritePin>
         			LED_CALL_GREEN_SR_DATA_Pin, g_u8AllLedCallGreenData);
         	HAL_GPIO_WritePin(LED_RESP_GREEN_SR_DATA_GPIO_Port,
- 800075c:	4b2c      	ldr	r3, [pc, #176]	; (8000810 <main+0x5f4>)
- 800075e:	781a      	ldrb	r2, [r3, #0]
- 8000760:	2390      	movs	r3, #144	; 0x90
- 8000762:	05db      	lsls	r3, r3, #23
- 8000764:	2108      	movs	r1, #8
- 8000766:	0018      	movs	r0, r3
- 8000768:	f000 fe37 	bl	80013da <HAL_GPIO_WritePin>
+ 8000750:	4b20      	ldr	r3, [pc, #128]	; (80007d4 <main+0x5b8>)
+ 8000752:	781a      	ldrb	r2, [r3, #0]
+ 8000754:	2390      	movs	r3, #144	; 0x90
+ 8000756:	05db      	lsls	r3, r3, #23
+ 8000758:	2108      	movs	r1, #8
+ 800075a:	0018      	movs	r0, r3
+ 800075c:	f000 fe3d 	bl	80013da <HAL_GPIO_WritePin>
         			LED_RESP_GREEN_SR_DATA_Pin, g_u8AllLedRespGreenData);
         	HAL_GPIO_WritePin(LED_CALL_RED_SR_DATA_GPIO_Port,
- 800076c:	4b29      	ldr	r3, [pc, #164]	; (8000814 <main+0x5f8>)
- 800076e:	781a      	ldrb	r2, [r3, #0]
- 8000770:	2390      	movs	r3, #144	; 0x90
- 8000772:	05db      	lsls	r3, r3, #23
- 8000774:	2110      	movs	r1, #16
- 8000776:	0018      	movs	r0, r3
- 8000778:	f000 fe2f 	bl	80013da <HAL_GPIO_WritePin>
+ 8000760:	4b1d      	ldr	r3, [pc, #116]	; (80007d8 <main+0x5bc>)
+ 8000762:	781a      	ldrb	r2, [r3, #0]
+ 8000764:	2390      	movs	r3, #144	; 0x90
+ 8000766:	05db      	lsls	r3, r3, #23
+ 8000768:	2110      	movs	r1, #16
+ 800076a:	0018      	movs	r0, r3
+ 800076c:	f000 fe35 	bl	80013da <HAL_GPIO_WritePin>
         			LED_CALL_RED_SR_DATA_Pin, g_u8AllLedCallRedData);
         	HAL_GPIO_WritePin(LED_RESP_RED_SR_DATA_GPIO_Port,
- 800077c:	4b26      	ldr	r3, [pc, #152]	; (8000818 <main+0x5fc>)
- 800077e:	781a      	ldrb	r2, [r3, #0]
- 8000780:	2390      	movs	r3, #144	; 0x90
- 8000782:	05db      	lsls	r3, r3, #23
- 8000784:	2104      	movs	r1, #4
- 8000786:	0018      	movs	r0, r3
- 8000788:	f000 fe27 	bl	80013da <HAL_GPIO_WritePin>
+ 8000770:	4b1a      	ldr	r3, [pc, #104]	; (80007dc <main+0x5c0>)
+ 8000772:	781a      	ldrb	r2, [r3, #0]
+ 8000774:	2390      	movs	r3, #144	; 0x90
+ 8000776:	05db      	lsls	r3, r3, #23
+ 8000778:	2104      	movs	r1, #4
+ 800077a:	0018      	movs	r0, r3
+ 800077c:	f000 fe2d 	bl	80013da <HAL_GPIO_WritePin>
         			LED_RESP_RED_SR_DATA_Pin, g_u8AllLedRespRedData);
         	for (uint8_t n = 0; n < NUMBER_OF_LINES; n++) {
- 800078c:	1d3b      	adds	r3, r7, #4
- 800078e:	2200      	movs	r2, #0
- 8000790:	701a      	strb	r2, [r3, #0]
- 8000792:	e012      	b.n	80007ba <main+0x59e>
+ 8000780:	1d3b      	adds	r3, r7, #4
+ 8000782:	2200      	movs	r2, #0
+ 8000784:	701a      	strb	r2, [r3, #0]
+ 8000786:	e040      	b.n	800080a <main+0x5ee>
+ 8000788:	200000f8 	.word	0x200000f8
+ 800078c:	48000400 	.word	0x48000400
+ 8000790:	200000e6 	.word	0x200000e6
+ 8000794:	20000000 	.word	0x20000000
+ 8000798:	200000e5 	.word	0x200000e5
+ 800079c:	200000e4 	.word	0x200000e4
+ 80007a0:	20000004 	.word	0x20000004
+ 80007a4:	200000dc 	.word	0x200000dc
+ 80007a8:	200000de 	.word	0x200000de
+ 80007ac:	2000000c 	.word	0x2000000c
+ 80007b0:	200000dd 	.word	0x200000dd
+ 80007b4:	200000df 	.word	0x200000df
+ 80007b8:	20000014 	.word	0x20000014
+ 80007bc:	2000001c 	.word	0x2000001c
+ 80007c0:	200000e8 	.word	0x200000e8
+ 80007c4:	200000e9 	.word	0x200000e9
+ 80007c8:	20000002 	.word	0x20000002
+ 80007cc:	20000001 	.word	0x20000001
+ 80007d0:	200000e0 	.word	0x200000e0
+ 80007d4:	200000e1 	.word	0x200000e1
+ 80007d8:	200000e2 	.word	0x200000e2
+ 80007dc:	200000e3 	.word	0x200000e3
+ 80007e0:	200000e7 	.word	0x200000e7
         		HAL_GPIO_WritePin(STP_SR_LED_CLK_GPIO_Port, STP_SR_LED_CLK_Pin,
- 8000794:	2390      	movs	r3, #144	; 0x90
- 8000796:	05db      	lsls	r3, r3, #23
- 8000798:	2201      	movs	r2, #1
- 800079a:	2180      	movs	r1, #128	; 0x80
- 800079c:	0018      	movs	r0, r3
- 800079e:	f000 fe1c 	bl	80013da <HAL_GPIO_WritePin>
+ 80007e4:	2390      	movs	r3, #144	; 0x90
+ 80007e6:	05db      	lsls	r3, r3, #23
+ 80007e8:	2201      	movs	r2, #1
+ 80007ea:	2180      	movs	r1, #128	; 0x80
+ 80007ec:	0018      	movs	r0, r3
+ 80007ee:	f000 fdf4 	bl	80013da <HAL_GPIO_WritePin>
         				GPIO_PIN_SET);
         		HAL_GPIO_WritePin(STP_SR_LED_CLK_GPIO_Port, STP_SR_LED_CLK_Pin,
- 80007a2:	2390      	movs	r3, #144	; 0x90
- 80007a4:	05db      	lsls	r3, r3, #23
- 80007a6:	2200      	movs	r2, #0
- 80007a8:	2180      	movs	r1, #128	; 0x80
- 80007aa:	0018      	movs	r0, r3
- 80007ac:	f000 fe15 	bl	80013da <HAL_GPIO_WritePin>
+ 80007f2:	2390      	movs	r3, #144	; 0x90
+ 80007f4:	05db      	lsls	r3, r3, #23
+ 80007f6:	2200      	movs	r2, #0
+ 80007f8:	2180      	movs	r1, #128	; 0x80
+ 80007fa:	0018      	movs	r0, r3
+ 80007fc:	f000 fded 	bl	80013da <HAL_GPIO_WritePin>
         	for (uint8_t n = 0; n < NUMBER_OF_LINES; n++) {
- 80007b0:	1d3b      	adds	r3, r7, #4
- 80007b2:	781a      	ldrb	r2, [r3, #0]
- 80007b4:	1d3b      	adds	r3, r7, #4
- 80007b6:	3201      	adds	r2, #1
- 80007b8:	701a      	strb	r2, [r3, #0]
- 80007ba:	1d3b      	adds	r3, r7, #4
- 80007bc:	781b      	ldrb	r3, [r3, #0]
- 80007be:	2b07      	cmp	r3, #7
- 80007c0:	d9e8      	bls.n	8000794 <main+0x578>
+ 8000800:	1d3b      	adds	r3, r7, #4
+ 8000802:	781a      	ldrb	r2, [r3, #0]
+ 8000804:	1d3b      	adds	r3, r7, #4
+ 8000806:	3201      	adds	r2, #1
+ 8000808:	701a      	strb	r2, [r3, #0]
+ 800080a:	1d3b      	adds	r3, r7, #4
+ 800080c:	781b      	ldrb	r3, [r3, #0]
+ 800080e:	2b07      	cmp	r3, #7
+ 8000810:	d9e8      	bls.n	80007e4 <main+0x5c8>
         				GPIO_PIN_RESET);
         	}
         	g_u8DisplayAllLinesUnicolor = 0;
- 80007c2:	4b16      	ldr	r3, [pc, #88]	; (800081c <main+0x600>)
- 80007c4:	2200      	movs	r2, #0
- 80007c6:	701a      	strb	r2, [r3, #0]
+ 8000812:	4b02      	ldr	r3, [pc, #8]	; (800081c <main+0x600>)
+ 8000814:	2200      	movs	r2, #0
+ 8000816:	701a      	strb	r2, [r3, #0]
         if (g_u8NeedToRingLine) {
- 80007c8:	e590      	b.n	80002ec <main+0xd0>
- 80007ca:	46c0      	nop			; (mov r8, r8)
- 80007cc:	200000e6 	.word	0x200000e6
- 80007d0:	20000000 	.word	0x20000000
- 80007d4:	200000e5 	.word	0x200000e5
- 80007d8:	200000e4 	.word	0x200000e4
- 80007dc:	20000004 	.word	0x20000004
- 80007e0:	200000dc 	.word	0x200000dc
- 80007e4:	200000de 	.word	0x200000de
- 80007e8:	2000000c 	.word	0x2000000c
- 80007ec:	200000dd 	.word	0x200000dd
- 80007f0:	200000df 	.word	0x200000df
- 80007f4:	20000014 	.word	0x20000014
- 80007f8:	2000001c 	.word	0x2000001c
- 80007fc:	200000e8 	.word	0x200000e8
- 8000800:	200000e9 	.word	0x200000e9
- 8000804:	20000002 	.word	0x20000002
- 8000808:	20000001 	.word	0x20000001
- 800080c:	200000e0 	.word	0x200000e0
- 8000810:	200000e1 	.word	0x200000e1
- 8000814:	200000e2 	.word	0x200000e2
- 8000818:	200000e3 	.word	0x200000e3
+ 8000818:	e568      	b.n	80002ec <main+0xd0>
+ 800081a:	46c0      	nop			; (mov r8, r8)
  800081c:	200000e7 	.word	0x200000e7
 
 08000820 <SystemClock_Config>:
