@@ -57,6 +57,9 @@ uint8_t g_u8ActiveRow = 0;
 uint8_t g_u8ActiveRowColor = 1;
 uint8_t g_u8ActiveLed = 0;
 uint8_t g_u8StepNumber = 0;
+uint8_t g_u8CallColumn;
+uint8_t g_u8RespString;
+
 /*поменять на ноль если режим мигание и потом все горят сразу и снова мигание*/
 uint8_t g_u8AllLinesUnicolor = 4;
 uint8_t g_u8ChangeColor = 1;
@@ -140,6 +143,7 @@ void loadLEDSR(void);
 void changeColorLEDSR(void);
 void changeRowLEDSR(void);
 void clearCallSR(void);
+//void usDelay();
 
 /* USER CODE END PFP */
 
@@ -161,23 +165,23 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-    HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
   /* Configure the system clock */
-    SystemClock_Config();
+  SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-    MX_GPIO_Init();
-    MX_TIM3_Init();
-    MX_TIM6_Init();
+  MX_GPIO_Init();
+  MX_TIM3_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
     //Установить все линии в первоначальное положение светодиодов
@@ -243,11 +247,11 @@ int main(void)
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_RESET);
 
-        	HAL_Delay(50); /*переместить часть кода в ф-цию прерываний*/
+	        usDelay(10); /*ожидание из функции - вместо HAL Delay*/
 
             /*сюда флаг для таймера?*/
-	        for (uint8_t u8CallColumn = 0; u8CallColumn < NUMBER_OF_LINES;
-	        		u8CallColumn++) {
+	        for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
+	        		g_u8CallColumn++) {
 
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
@@ -259,8 +263,8 @@ int main(void)
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
 
-		        for (uint8_t u8RespString = 0; u8RespString < NUMBER_OF_LINES;
-		        		u8RespString++) {
+		        for (g_u8RespString = 0; g_u8RespString < NUMBER_OF_LINES;
+		        		g_u8RespString++) {
 
 		            HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
 		            		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
@@ -269,10 +273,10 @@ int main(void)
 
 			        if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
 			        		LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
-				        g_au8ResponsesData[u8CallColumn][u8RespString] = 1;
+				        g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 0;
 			        }
 			        else {
-				        g_au8ResponsesData[u8CallColumn][u8RespString] = 0;
+				        g_au8ResponsesData[g_u8CallColumn][g_u8RespString] = 1;
 			        }
 
 		        }
@@ -282,7 +286,9 @@ int main(void)
 	        }
         }
 
-
+        //перевернуть запись с 1 на ноль - сделано
+        //тогда суммарно будет работать
+        //переключение с мультика на отображение засчет суммы массива больше 1
 
         /* data processing */
         //хочу чтобы двумерный массив обработался и
@@ -564,7 +570,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 1600;
+  htim6.Init.Prescaler = 16;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 65535;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -677,6 +683,22 @@ void clearCallSR(void)
 			GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LINE_CALL_SR_nCLR_GPIO_Port, LINE_CALL_SR_nCLR_Pin,
 			GPIO_PIN_SET);
+}
+
+void usDelay(uint16_t u16useconds)
+{
+  //Обнуляем счетчик таймера
+  __HAL_TIM_SET_COUNTER(&htim6, 0);
+  __HAL_TIM_CLEAR_FLAG(&htim6, TIM_FLAG_UPDATE);
+  //ждем пока счетчик не достигнет заданного времени
+  while(__HAL_TIM_GET_COUNTER(&htim6) < u16useconds)
+  {
+    //Ставим проверку, если вдруг счетчик переполнится
+    if (__HAL_TIM_GET_FLAG(&htim6, TIM_FLAG_UPDATE) != RESET)
+    {
+      break;
+    }
+  }
 }
 
 //void ChangeRowLEDSR(void)
