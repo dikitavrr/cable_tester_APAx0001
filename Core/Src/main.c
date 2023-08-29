@@ -243,7 +243,7 @@ int main(void)
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_RESET);
 
-        	HAL_Delay(50);
+        	HAL_Delay(50); /*переместить часть кода в ф-цию прерываний*/
 
             /*сюда флаг для таймера?*/
 	        for (uint8_t u8CallColumn = 0; u8CallColumn < NUMBER_OF_LINES;

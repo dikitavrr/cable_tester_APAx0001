@@ -31,21 +31,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .debug_info   00007b1a  00000000  00000000  0002009b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00001520  00000000  00000000  00027bb5  2**0
+ 14 .debug_abbrev 00001531  00000000  00000000  00027bb5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 000008d8  00000000  00000000  000290d8  2**3
+ 15 .debug_aranges 000008d8  00000000  00000000  000290e8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_rnglists 000006dd  00000000  00000000  000299b0  2**0
+ 16 .debug_rnglists 000006dd  00000000  00000000  000299c0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00019e90  00000000  00000000  0002a08d  2**0
+ 17 .debug_macro  00019e90  00000000  00000000  0002a09d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0000a14f  00000000  00000000  00043f1d  2**0
+ 18 .debug_line   0000a14d  00000000  00000000  00043f2d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000a051e  00000000  00000000  0004e06c  2**0
+ 19 .debug_str    000a051e  00000000  00000000  0004e07a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00001f8c  00000000  00000000  000ee58c  2**2
+ 20 .debug_frame  00001f8c  00000000  00000000  000ee598  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000067  00000000  00000000  000f0518  2**0
+ 21 .debug_line_str 00000067  00000000  00000000  000f0524  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -439,12 +439,9 @@ int main(void)
  800033c:	2180      	movs	r1, #128	; 0x80
  800033e:	0018      	movs	r0, r3
  8000340:	f001 f839 	bl	80013b6 <HAL_GPIO_WritePin>
-//	        		GPIO_PIN_RESET);
+	                GPIO_PIN_RESET);
 
-//        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
-//        			GPIO_PIN_SET);
-
-        	HAL_Delay(50);
+        	HAL_Delay(50); /*переместить часть кода в ф-цию прерываний*/
  8000344:	2032      	movs	r0, #50	; 0x32
  8000346:	f000 fd9f 	bl	8000e88 <HAL_Delay>
 
@@ -567,7 +564,8 @@ int main(void)
 			        }
 
 		        }
-	        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+
+	        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
  8000414:	4bd4      	ldr	r3, [pc, #848]	; (8000768 <main+0x54c>)
  8000416:	2201      	movs	r2, #1
  8000418:	2180      	movs	r1, #128	; 0x80
