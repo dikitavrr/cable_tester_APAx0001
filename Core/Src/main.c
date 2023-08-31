@@ -57,8 +57,8 @@ uint8_t g_u8ActiveRow = 0;
 uint8_t g_u8ActiveRowColor = 1;
 uint8_t g_u8ActiveLed = 0;
 uint8_t g_u8StepNumber = 0;
-uint8_t g_u8CallColumn;
-uint8_t g_u8RespString;
+uint8_t g_u8CallColumn = 0;
+uint8_t g_u8RespString = 0;
 
 /*поменять на ноль если режим мигание и потом все горят сразу и снова мигание*/
 uint8_t g_u8AllLinesUnicolor = 4;
@@ -72,7 +72,8 @@ uint8_t g_u8NeedToDefineLedGreenData = 0;
 uint8_t g_u8NeedToDefineLedRedData = 0;
 uint8_t g_u8NeedToDefineLedNothingData = 0;
 /*далее обнулить и единичить по таймеру 10-100кгц*/
-uint8_t g_u8NeedToRingLine = 1;
+uint8_t g_u8NeedToRingLine = 0;
+uint16_t g_u16timeCounter = 0;
 
 RCC_ClkInitTypeDef sClokConfig;
 uint32_t g_u32Prescaler;
@@ -216,6 +217,28 @@ int main(void)
     		((g_u32Prescaler + 1) * 1000)) - 1;
     __HAL_TIM_SET_AUTORELOAD(&htim3, g_u32TimePeriod);
 
+    /*START SETTINGS FOR RINGING*/
+
+    clearCallSR();
+
+	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+			GPIO_PIN_SET);
+
+    for (uint8_t i = 0; i < NUMBER_OF_LINES - 1; i++) {
+    	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
+    			GPIO_PIN_SET);
+    	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
+    			GPIO_PIN_RESET);
+    }
+
+    HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+            GPIO_PIN_RESET);
+
+//    HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+//    		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
+//    HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+//    		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -232,31 +255,11 @@ int main(void)
     		 	 	 * результат записался в двумерный массив*/
         if (g_u8NeedToRingLine) {
 
-            clearCallSR();
-
-        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
-        			GPIO_PIN_SET);
-
-            for (uint8_t i = 0; i < NUMBER_OF_LINES - 1; i++) {
-            	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
-            			GPIO_PIN_SET);
-            	HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port, LINE_CALL_SR_CLK_Pin,
-            			GPIO_PIN_RESET);
-            }
-
-	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
-	                GPIO_PIN_RESET);
-
             /*сюда флаг для таймера?*/
 	        for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
 	        		g_u8CallColumn++) {
 
-		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
-		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
-
-		        usDelay(10); /*ожидание из функции - вместо HAL Delay*/
+		        //usDelay(10); /*ожидание из функции - вместо HAL Delay*/
 
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
@@ -284,6 +287,7 @@ int main(void)
 	        	HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
 	        			LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
 	        }
+	        g_u8NeedToRingLine = 0;
         }
 
         //перевернуть запись с 1 на ноль - сделано
@@ -725,9 +729,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 	if (htim == &htim6)
 	{
-		/**/
-
-
+		if (g_u16timeCounter == 1) {
+		    HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+		    		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
+		    HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+		    		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
+		}
+		g_u16timeCounter++;
+		if (g_u16timeCounter == PERIOD_OF_RINGING_LINE_US + 1) {
+			g_u16timeCounter = 0;
+			g_u8NeedToRingLine = 1;
+		}
 	}
 }
 
