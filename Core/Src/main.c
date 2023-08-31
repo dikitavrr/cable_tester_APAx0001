@@ -143,7 +143,7 @@ void loadLEDSR(void);
 void changeColorLEDSR(void);
 void changeRowLEDSR(void);
 void clearCallSR(void);
-//void usDelay();
+void usDelay(uint16_t u16useconds);
 
 /* USER CODE END PFP */
 
@@ -247,8 +247,6 @@ int main(void)
 	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
 	                GPIO_PIN_RESET);
 
-	        usDelay(10); /*ожидание из функции - вместо HAL Delay*/
-
             /*сюда флаг для таймера?*/
 	        for (g_u8CallColumn = 0; g_u8CallColumn < NUMBER_OF_LINES;
 	        		g_u8CallColumn++) {
@@ -257,6 +255,8 @@ int main(void)
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
 		        HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
 		        		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
+
+		        usDelay(10); /*ожидание из функции - вместо HAL Delay*/
 
 		        HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 		        		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
@@ -687,18 +687,16 @@ void clearCallSR(void)
 
 void usDelay(uint16_t u16useconds)
 {
-  //Обнуляем счетчик таймера
-  __HAL_TIM_SET_COUNTER(&htim6, 0);
-  __HAL_TIM_CLEAR_FLAG(&htim6, TIM_FLAG_UPDATE);
-  //ждем пока счетчик не достигнет заданного времени
-  while(__HAL_TIM_GET_COUNTER(&htim6) < u16useconds)
-  {
-    //Ставим проверку, если вдруг счетчик переполнится
-    if (__HAL_TIM_GET_FLAG(&htim6, TIM_FLAG_UPDATE) != RESET)
-    {
-      break;
-    }
-  }
+	//Обнуляем счетчик таймера
+	__HAL_TIM_SET_COUNTER(&htim6, 0);
+	__HAL_TIM_CLEAR_FLAG(&htim6, TIM_FLAG_UPDATE);
+	//ждем пока счетчик не достигнет заданного времени
+	while(__HAL_TIM_GET_COUNTER(&htim6) < u16useconds) {
+		//Ставим проверку, если вдруг счетчик переполнится
+		if (__HAL_TIM_GET_FLAG(&htim6, TIM_FLAG_UPDATE) != RESET) {
+			break;
+		}
+	}
 }
 
 //void ChangeRowLEDSR(void)
