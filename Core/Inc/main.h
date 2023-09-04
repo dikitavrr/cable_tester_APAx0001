@@ -69,6 +69,8 @@ void Error_Handler(void);
 #define STP_SR_LED_nCLR_GPIO_Port GPIOA
 #define STP_SR_LED_CLK_Pin GPIO_PIN_7
 #define STP_SR_LED_CLK_GPIO_Port GPIOA
+#define Temp_sensor_cable_RED_LED_Pin GPIO_PIN_1
+#define Temp_sensor_cable_RED_LED_GPIO_Port GPIOB
 #define LINE_RESPONSE_SR_SHnLD_Pin GPIO_PIN_15
 #define LINE_RESPONSE_SR_SHnLD_GPIO_Port GPIOA
 #define LINE_RESPONSE_SR_CLK_Pin GPIO_PIN_3

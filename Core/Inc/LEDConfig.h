@@ -76,4 +76,6 @@
 #define NUMBER_OF_SR 2
 
 #define SR_DATA_bm 0b00000001
+#define SR_DATA_CALL 0b11111111
+
 #endif /* LEDCONFIG_H_ */
