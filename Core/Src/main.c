@@ -73,9 +73,9 @@ uint8_t g_u8NeedToDefineLedGreenData = 0;
 uint8_t g_u8NeedToDefineLedRedData = 0;
 uint8_t g_u8NeedToDefineLedNothingData = 0;
 /*далее обнулить и единичить по таймеру 10-100кгц*/
-uint8_t g_u8NeedToRingLine = 0;
+uint8_t g_u8RingDataReadyToReadFlag = 0;
 uint16_t g_u16TimeCounter = 0;
-uint8_t g_u8NumberOfRetry = 0;
+uint8_t g_u8CallWireStep = 0;
 
 RCC_ClkInitTypeDef sClokConfig;
 uint16_t g_u16PrescalerHtim3;
@@ -90,7 +90,7 @@ uint32_t B;
 uint32_t C;
 
 uint8_t g_u8CallData = 0b10000000;
-uint8_t g_u8ActiveLineRinging = 0;
+uint8_t g_u8ActiveWireCheck = 0;
 uint8_t g_u8CallDataMemory = 0;
 
 
@@ -162,7 +162,7 @@ void changeColorLedSr(void);
 void changeRowLedSr(void);
 void clearCallSr(void);
 void usDelay(uint16_t u16useconds);
-void recordResponsesSr (void);
+void readResponsesSr (void);
 
 /* USER CODE END PFP */
 
@@ -270,10 +270,10 @@ int main(void)
     		/*ringing of lines*/
     		/*хочу чтобы 01111111 прошёл поочерёдно по 8 линиям и
     		 	 	 * результат записался в двумерный массив*/
-        if (g_u8NeedToRingLine) {
+        if (g_u8RingDataReadyToReadFlag) {
 
-        	recordResponsesSr();
-	        g_u8NeedToRingLine = 0;
+        	readResponsesSr();
+	        g_u8RingDataReadyToReadFlag = 0;
         }
 
         //перевернуть запись с 1 на ноль - сделано
@@ -678,36 +678,35 @@ void clearCallSr(void)
 			GPIO_PIN_SET);
 }
 
-void recordResponsesSr (void)
+void readResponsesSr (void)
 {
-	for (g_u8CallLineNumber = 0; g_u8CallLineNumber < NUMBER_OF_LINES;
-			g_u8CallLineNumber++) {
+	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
+			LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
+	    	LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
 
-	    HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
-	    		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
-	    HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
-	    		LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_SET);
+	for (g_u8ResponseLineNumber = 0; g_u8ResponseLineNumber < NUMBER_OF_LINES;
+			g_u8ResponseLineNumber++) {
 
-	    for (g_u8ResponseLineNumber = 0; g_u8ResponseLineNumber < NUMBER_OF_LINES;
-	    		g_u8ResponseLineNumber++) {
+		HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
+				LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
+				LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
 
-	        HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
-	        		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_SET);
-	        HAL_GPIO_WritePin(LINE_RESPONSE_SR_CLK_GPIO_Port,
-	        		LINE_RESPONSE_SR_CLK_Pin, GPIO_PIN_RESET);
+	if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
+			LINE_RESPONSE_SR_DATA_Pin)) {
+		g_au8ResponsesData[g_u8ActiveWireCheck][g_u8ResponseLineNumber] = WIRE_NACK;
+	}
+	else {
+		g_au8ResponsesData[g_u8ActiveWireCheck][g_u8ResponseLineNumber] = WIRE_ACK;
+	}
 
-	        if (HAL_GPIO_ReadPin(LINE_RESPONSE_SR_DATA_GPIO_Port,
-	        		LINE_RESPONSE_SR_DATA_Pin) == GPIO_PIN_SET) {
-		        g_au8ResponsesData[g_u8CallLineNumber][g_u8ResponseLineNumber] = 0;
-	        }
-	        else {
-		        g_au8ResponsesData[g_u8CallLineNumber][g_u8ResponseLineNumber] = 1;
-	        }
-
-	    }
-
-		HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port,
-				LINE_CALL_SR_DATA_Pin, GPIO_PIN_SET);
+	}
+	HAL_TIM_Base_Start_IT(&htim6); /*разрешаем прерывания*/
+	g_u8ActiveWireCheck++; /*так знаем какую линию звоним*/
+	if (g_u8ActiveWireCheck == NUMBER_OF_LINES){
+		g_u8ActiveWireCheck = 0;
+		/*флаг для будущего анализа  + запрет на прерывания*/
 	}
 }
 
@@ -753,26 +752,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 	if (htim == &htim6)
 	{
-	        HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
-	        		(~(g_u8CallData) & SR_DATA_bm));
-	        g_u8CallData = g_u8CallData >> 1;
+		HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+				(~(SR_DATA_bm << g_u8ActiveWireCheck) & (SR_DATA_bm << g_u8CallWireStep) ));
 
-		    HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-		    		LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
-		    HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-		    		LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+				LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+				LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
 
-		    g_u8NumberOfRetry++; /*считаем позиции регистра*/
+		g_u8CallWireStep++; /*считаем позиции регистра*/
 
-		if (g_u8NumberOfRetry == NUMBER_OF_LINES){
-			g_u8NeedToRingLine = 1; /*разрешаем считывать как выставили 8 позиций в регистре*/
-			g_u8ActiveLineRinging++; /*так знаем какую линию звоним*/
-			g_u8CallData = g_u8CallDataMemory;
-			g_u8CallData = (g_u8CallData >> g_u8ActiveLineRinging)/* & SR_DATA_CALL*/;
-
-			if (g_u8ActiveLineRinging == NUMBER_OF_LINES){
-				g_u8ActiveLineRinging = 0;
-			}
+		if (g_u8CallWireStep == NUMBER_OF_LINES) {
+			/*разрешаем считывать как выставили 8 позиций в регистре*/
+			g_u8RingDataReadyToReadFlag = 1;
+			g_u8CallWireStep = 0;
+	        HAL_TIM_Base_Stop_IT(&htim6); /*запрещаем прерывания*/
 		}
 	}
 }
