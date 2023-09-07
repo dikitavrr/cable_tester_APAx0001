@@ -40,9 +40,9 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim15;
 
 /* USER CODE BEGIN PV */
 uint8_t g_u8LedCallGreenData = 0;
@@ -82,23 +82,25 @@ uint8_t g_u8NeedToAnalyzeCableDataFlag = 0;
 RCC_ClkInitTypeDef sClokConfig;
 uint16_t g_u16PrescalerHtim3;
 uint16_t g_u16PrescalerHtim6;
-uint16_t g_u16PrescalerHtim1;
+uint16_t g_u16Prescalerhtim15;
 uint32_t g_u32frequencyTim;
 uint32_t g_u32TimePeriodCallRespLed = 0;
 uint16_t g_u16TimePeriodTempSensor = 0;
 uint16_t g_u16TimePeriodRingLine = 0;
 uint16_t g_u16TimePeriodStartIndication = 0;
 
-uint32_t DebugTimeBegin;
-uint32_t DebugTimeEnd;
-uint32_t DebugTimeDifference;
+uint32_t g_u32DebugTimeBegin;
+uint32_t g_u32DebugTimeEnd;
+uint32_t g_u32DebugTimeDifference;
 
 //uint8_t g_u8CallData = 0b10000000;
 uint8_t g_u8ActiveWireCheck = 0;
 //uint8_t g_u8CallDataMemory = 0;
 uint8_t g_u8SummResponsesWire = 0;
+uint8_t g_u8SummResponsesArray = 0;
 uint8_t g_u8CounterUnitsDigits = 0;
-uint8_t g_u8StartIndicationFlag = 0;
+uint8_t g_u8StartIndicationFlag = 1;
+uint8_t g_u8NeedToDisplayStartLedData = 0;
 
 
 //uint32_t uwTick;
@@ -162,7 +164,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM6_Init(void);
-static void MX_TIM1_Init(void);
+static void MX_TIM15_Init(void);
 /* USER CODE BEGIN PFP */
 void clearLedSr(void);
 void loadLedSr(void);
@@ -170,9 +172,9 @@ void changeColorLedSr(void);
 void changeRowLedSr(void);
 void clearCallSr(void);
 void usDelay(uint16_t u16useconds);
-void readResponsesSr (void);
-void analyzeCableData (void);
-void startIndicationLeds (void);
+void readResponsesSr(void);
+void analyzeCableData(void);
+void startIndicationLeds(void);
 
 /* USER CODE END PFP */
 
@@ -211,7 +213,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   MX_TIM6_Init();
-  MX_TIM1_Init();
+  MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
 
     //Установить все линии в первоначальное положение светодиодов
@@ -236,6 +238,8 @@ int main(void)
     if (USE_TIMER) {
         HAL_TIM_Base_Start_IT(&htim3);
         HAL_TIM_Base_Start_IT(&htim6);
+        HAL_TIM_Base_Start_IT(&htim15);
+
     }
 
     /*TIME SETTINGS*/
@@ -243,6 +247,7 @@ int main(void)
     g_u32frequencyTim = HAL_RCC_GetPCLK1Freq();
     g_u16PrescalerHtim3 = htim3.Init.Prescaler;
     g_u16PrescalerHtim6 = htim6.Init.Prescaler;
+    g_u16Prescalerhtim15 = htim15.Init.Prescaler;
 
     /*TIME SETTINGS FOR CALL-RESP LEDs*/
 
@@ -264,14 +269,14 @@ int main(void)
 
     /*TIME SETTINGS FOR START INDICATION*/
 
-    g_u16TimePeriodStartIndication = ((g_u32frequencyTim) / ((g_u16PrescalerHtim1 + 1) *
+    g_u16TimePeriodStartIndication = ((g_u32frequencyTim) / ((g_u16Prescalerhtim15 + 1) *
     		1000)) * ((uint16_t)TIME_BLINKING_LED_MS);
-    __HAL_TIM_SET_AUTORELOAD(&htim1, g_u16TimePeriodStartIndication);
+    __HAL_TIM_SET_AUTORELOAD(&htim15, g_u16TimePeriodStartIndication);
 
     /*START SETTINGS FOR TS*2*/
 
-	HAL_GPIO_WritePin(Temp_sensor_cable_RED_LED_GPIO_Port,
-			Temp_sensor_cable_RED_LED_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(Temp_sensor_cable_RED_LED_GPIO_Port,
+//			Temp_sensor_cable_RED_LED_Pin, GPIO_PIN_SET);
 
   /* USER CODE END 2 */
 
@@ -287,11 +292,32 @@ int main(void)
     		/*хочу чтобы 01111111 прошёл поочерёдно по 8 линиям и
     		 	 	 * результат записался в двумерный массив*/
     	/*вставить мультик и сделать флаг на запись таймера как только в ответе хоть где-то единица*/
-    	/*ВВЕСТИ? ЕЩЁ ОД�?Н ТАЙМЕР для стартовой индикации*/
+
     	if (g_u8StartIndicationFlag) {
     		startIndicationLeds ();
-    		g_u8StartIndicationFlag = 0;
+    		//g_u8StartIndicationFlag = 0;
     	}
+    	if (!USE_TIMER) {
+    		g_u8NeedToDisplayStartLedData = 1;
+    	}
+    	if (g_u8NeedToDisplayStartLedData) {
+        	clearLedSr();
+        	loadLedSr();
+    		g_u8ActiveLed++;
+    		if (g_u8ActiveLed == NUMBER_OF_LEDS) {
+    			g_u8ActiveRowColor++;
+    			g_u8ActiveLed = 0;
+    			if (g_u8ActiveRowColor == NUMBER_OF_COLORS) {
+    				g_u8ActiveRowColor = 1;
+    			}
+    		}
+    		if (g_u8ActiveRow == NUMBER_OF_LINES) {
+    			g_u8ActiveRow = 0;
+    		}
+    		g_u8ActiveRow++;
+    		g_u8NeedToDisplayStartLedData = 0;
+    	}
+
         if (g_u8RingDataReadyToReadFlag) {
         	readResponsesSr();
 	        g_u8RingDataReadyToReadFlag = 0;
@@ -304,6 +330,7 @@ int main(void)
         if (g_u8NeedToDisplayLedData) {
         	clearLedSr();
         	loadLedSr();
+        	g_u8NeedToDisplayLedData = 0;
         }
 
         //перевернуть запись с 1 на ноль - сделано
@@ -528,52 +555,6 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief TIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM1_Init(void)
-{
-
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-  /* USER CODE END TIM1_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM1_Init 1 */
-
-  /* USER CODE END TIM1_Init 1 */
-  htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 15999;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 500;
-  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  /* USER CODE END TIM1_Init 2 */
-
-}
-
-/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -653,6 +634,52 @@ static void MX_TIM6_Init(void)
   /* USER CODE BEGIN TIM6_Init 2 */
 
   /* USER CODE END TIM6_Init 2 */
+
+}
+
+/**
+  * @brief TIM15 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM15_Init(void)
+{
+
+  /* USER CODE BEGIN TIM15_Init 0 */
+
+  /* USER CODE END TIM15_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM15_Init 1 */
+
+  /* USER CODE END TIM15_Init 1 */
+  htim15.Instance = TIM15;
+  htim15.Init.Prescaler = 15999;
+  htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim15.Init.Period = 500;
+  htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim15.Init.RepetitionCounter = 0;
+  htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim15, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM15_Init 2 */
+
+  /* USER CODE END TIM15_Init 2 */
 
 }
 
@@ -755,7 +782,7 @@ void clearCallSr(void)
 }
 
 
-void readResponsesSr (void)
+void readResponsesSr(void)
 {
 	HAL_GPIO_WritePin(LINE_RESPONSE_SR_SHnLD_GPIO_Port,
 			LINE_RESPONSE_SR_SHnLD_Pin, GPIO_PIN_RESET);
@@ -776,9 +803,11 @@ void readResponsesSr (void)
 		}
 		else {
 			g_au8ResponsesData[g_u8ActiveWireCheck][g_u8ResponseLineNumber] = WIRE_ACK;
+			HAL_TIM_Base_Stop_IT(&htim15); /*запрещаем стартовую по прерыванию*/
+			g_u8StartIndicationFlag = 0;
 		}
 	}
-	HAL_TIM_Base_Start_IT(&htim6); /*разрешаем прерывания*/
+	HAL_TIM_Base_Stop_IT(&htim6); /*разрешаем прерывания*/
 	g_u8NeedToAnalyzeCableDataFlag = 1;
 //	g_u8ActiveWireCheck++; /*так знаем какую линию звоним*/ /***переместить в анализ??????????????***/
 //	if (g_u8ActiveWireCheck == NUMBER_OF_LINES){
@@ -788,13 +817,20 @@ void readResponsesSr (void)
 }
 // todo: переименовать SR_DATA_bm в MASK_LOW_BIT_UNIT ???????
 
-void analyzeCableData (void)
+void analyzeCableData(void)
 {
 	for (g_u8ResponseLineNumber = 0; g_u8ResponseLineNumber < NUMBER_OF_LINES;
 			g_u8ResponseLineNumber++){
 		if (g_au8ResponsesData[g_u8ActiveWireCheck][g_u8ResponseLineNumber]) {
 			g_u8SummResponsesWire++;
+			g_u8SummResponsesArray++;
 		}
+	}
+	if ((g_u8SummResponsesArray == 0) && (g_u8ActiveWireCheck == NUMBER_OF_LINES)) {
+		/*включить 15 тим*/
+		/*выключить 3 тим*/
+		HAL_TIM_Base_Stop_IT(&htim3);
+		HAL_TIM_Base_Start_IT(&htim15); /*разрешаем прерывания*/
 	}
 	if ((g_au8ResponsesData[g_u8ActiveWireCheck][g_u8ActiveWireCheck]) && (g_u8SummResponsesWire = 1)) {
 		g_u8LedCallGreenData = g_u8LedCallGreenData | (SR_DATA_bm << g_u8ActiveWireCheck);
@@ -835,13 +871,55 @@ void analyzeCableData (void)
 	if (g_u8ActiveWireCheck == NUMBER_OF_LINES){
 		g_u8ActiveWireCheck = 0;
 		/*запрет на прерывания??*/
+		g_u8SummResponsesArray = 0;
 	}
 	g_u8SummResponsesWire = 0;
+	//HAL_TIM_Base_Start_IT(&htim6); /*разрешаем прерывания после того как отобразили первое*/
+	HAL_TIM_Base_Start_IT(&htim3);
+
+
+
 }
 
-void startIndicationLeds (void)
+void startIndicationLeds(void)
 {
+	if (g_u8ActiveRowColor == GREEN_COLOR) {
+		if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
+			g_u8LedCallGreenData = (LED_ON << g_au8GreenCalls[g_u8ActiveRow]);
+			g_u8LedCallRedData = LED_OFF;
+		}
+		if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) && (g_u8ActiveLed < NUMBER_OF_LEDS)) {
+			g_u8LedRespGreenData = (LED_ON <<
+					g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1]);
+			g_u8LedRespRedData = LED_OFF;
+		}
+	}
 
+	if (g_u8ActiveRowColor == RED_COLOR) {
+		if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
+			g_u8LedCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
+			g_u8LedCallGreenData = LED_OFF;
+		}
+		if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) && (g_u8ActiveLed < NUMBER_OF_LEDS)) {
+			g_u8LedRespRedData = LED_ON <<
+					g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
+			g_u8LedRespGreenData = LED_OFF;
+		}
+	}
+
+	if (g_u8ActiveRowColor == YELLOW_COLOR) {
+		if ((g_u8ActiveLed >= 0) && (g_u8ActiveLed < NUMBER_OF_LEDS / 2)) {
+			g_u8LedCallGreenData = LED_ON << g_au8GreenCalls[g_u8ActiveRow];
+			g_u8LedCallRedData = LED_ON << g_au8RedCalls[g_u8ActiveRow];
+		}
+		if ((g_u8ActiveLed >= NUMBER_OF_LEDS / 2) && (g_u8ActiveLed < NUMBER_OF_LEDS)) {
+			g_u8LedRespGreenData = LED_ON <<
+					g_au8GreenResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
+			g_u8LedRespRedData = LED_ON <<
+					g_au8RedResponses[NUMBER_OF_LINES - g_u8ActiveRow - 1];
+		}
+	}
+    HAL_TIM_Base_Start_IT(&htim15);
 }
 
 void usDelay(uint16_t u16useconds)
@@ -877,35 +955,38 @@ void usDelay(uint16_t u16useconds)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 
-	if (htim == &htim3)
-	{
-		//g_u8NeedToDisplayLedData = 1;
-		HAL_GPIO_TogglePin(Temp_sensor_cable_RED_LED_GPIO_Port,
-				Temp_sensor_cable_RED_LED_Pin);
-	}
-
-	if (htim == &htim6)
-	{
-		HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
-				(~(SR_DATA_bm << g_u8ActiveWireCheck) & (SR_DATA_bm << g_u8CallWireStep) ));
-
-		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-				LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
-				LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
-
-		g_u8CallWireStep++; /*считаем позиции регистра*/
-
-		if (g_u8CallWireStep == NUMBER_OF_LINES) {
-			/*разрешаем считывать как выставили 8 позиций в регистре*/
-			g_u8RingDataReadyToReadFlag = 1;
-			g_u8CallWireStep = 0;
-	        HAL_TIM_Base_Stop_IT(&htim6); /*запрещаем прерывания*/
-		}
-	}
-	if (htim == &htim1)
+//	if (htim == &htim3)
+//	{
+//		//g_u8NeedToDisplayLedData = 1;
+//	HAL_TIM_Base_Start_IT(&htim6); /*разрешаем прерывания после того как отобразили первое*/
+//		HAL_GPIO_TogglePin(Temp_sensor_cable_RED_LED_GPIO_Port,
+//				Temp_sensor_cable_RED_LED_Pin);
+//	}
+//
+//	if (htim == &htim6)
+//	{
+//		HAL_GPIO_WritePin(LINE_CALL_SR_DATA_GPIO_Port, LINE_CALL_SR_DATA_Pin,
+//				(~(SR_DATA_bm << g_u8ActiveWireCheck) & (SR_DATA_bm << g_u8CallWireStep) ));
+//
+//		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+//				LINE_CALL_SR_CLK_Pin, GPIO_PIN_SET);
+//		HAL_GPIO_WritePin(LINE_CALL_SR_CLK_GPIO_Port,
+//				LINE_CALL_SR_CLK_Pin, GPIO_PIN_RESET);
+//
+//		g_u8CallWireStep++; /*считаем позиции регистра*/
+//
+//		if (g_u8CallWireStep == NUMBER_OF_LINES) {
+//			/*разрешаем считывать как выставили 8 позиций в регистре*/
+//			g_u8RingDataReadyToReadFlag = 1;
+//			g_u8CallWireStep = 0;
+//	        HAL_TIM_Base_Stop_IT(&htim6); /*запрещаем прерывания*/
+//		}
+//	}
+	if (htim == &htim15)
 	{
 		g_u8StartIndicationFlag = 1;
+		g_u8NeedToDisplayStartLedData = 1;
+		//HAL_TIM_Base_Stop_IT(&htim15); /*запрещаем прерывания*/
 	}
 }
 
